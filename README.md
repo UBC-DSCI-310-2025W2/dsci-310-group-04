@@ -1,5 +1,5 @@
 # dsci-310-group-04
-# Online vs In-Store Shopping Behaviour Analysis
+# Predicting Online Purchase Intent from Consumer Behavior
 
 ## Contributors
 - Athena Wong
