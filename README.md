@@ -1,4 +1,4 @@
-# dsci-310-group-04
+# DSCI-310-Group-04
 # Predicting Online Purchase Intent from Consumer Behavior
 
 ## Contributors
