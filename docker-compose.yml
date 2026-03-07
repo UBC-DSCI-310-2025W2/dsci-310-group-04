@@ -1,0 +1,38 @@
+# ============================================================
+# docker-compose.yml
+#
+# This file makes it easy for anyone to start the analysis
+# environment with one short command instead of a long
+# "docker run" command with many flags.
+#
+# HOW TO USE:
+#   docker compose up
+#
+# Then open the URL printed in the terminal (starts with
+# http://127.0.0.1:8888/lab?token=...)
+# ============================================================
+
+version: "3"
+
+services:
+  analysis-env:
+    # Pull the pre-built image from DockerHub.
+    # Replace YOUR_DOCKERHUB_USERNAME with your actual DockerHub username.
+    # Teammates can use this instead of building the image themselves.
+    image: awong62/dsci-310-group-04:latest
+
+    # If you want to build from the local Dockerfile instead, comment out
+    # "image:" above and uncomment these two lines:
+    # build:
+    #   context: .
+
+    ports:
+      # Maps port 8888 inside the container to port 8888 on your computer.
+      # This is how JupyterLab becomes accessible in your browser.
+      - "8888:8888"
+
+    volumes:
+      # Mounts your local project folder into the container at /home/jovyan/work.
+      # This means edits you make in JupyterLab are saved to your real files,
+      # and the container can see your notebooks, data, and scripts.
+      - .:/home/jovyan/work
