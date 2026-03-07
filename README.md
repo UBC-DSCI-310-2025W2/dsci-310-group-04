@@ -134,8 +134,6 @@ This project requires the following software and R libraries:
 - pROC
 - caret
 
-These dependencies will be automatically installed when building the Docker container.
-
 ---
 
 # License
