@@ -42,6 +42,7 @@ The dataset contains shopper's demographic and behavior information, including v
 - SpecialDay
 - Region
 - VisitorType
+- etc.
 
 The target variable used in this project is **Revenuw**, which is a **binary** variable that indicates whether the visit has been **finalized with a transaction**.
 
@@ -81,7 +82,7 @@ git clone https://github.com/UBC-DSCI-310-2025W2/dsci-310-group-04.git
 cd dsci-310-group-04
 ```
 
-### 3. Build the Docker image
+### 3. Create a Docker image from the Dockerfile
 
 ```bash
 docker build -t purchase-intention-analysis .
@@ -90,12 +91,12 @@ docker build -t purchase-intention-analysis .
 ### 4. Run the Docker container
 
 ```bash
-docker run -p 8888:8888 purchase-intention-analysis
+docker run --rm -e PASSWORD="dsci" -p 8888:8888 purchase-intention-analysis
 ```
 
 ### 5. Open the Jupyter Notebook
 
-After launching the container, open the Jupyter link shown in the terminal and run the analysis notebook.
+After launching the container, open the Jupyter link shown in the terminal and run the analysis notebook named 'milestone_1.ipynb' under reports/milestone_1.
 
 ---
 
@@ -106,13 +107,17 @@ After launching the container, open the Jupyter link shown in the terminal and r
 ├── README.md
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
+├── CODEOWNERS
+├── .gitignore
 ├── LICENSE
 ├── Dockerfile
+├── docs/
+│   └──milestone_1/
 ├── reports/
-│   └── milestone_1
+│   └── milestone_1/
 │      └── milestone_1.ipynb
 └── .github/workflows/
-    └── publish_docker_image.yml  #to be fixed
+    └── publish_docker_image.yml 
 ```
 
 ---
@@ -120,8 +125,7 @@ After launching the container, open the Jupyter link shown in the terminal and r
 # Dependencies
 
 This project requires the following software and R libraries:
-
-- R (4.4.2)
+- rstudio(4.4.2)
 
 - tidyverse
 - glmnet
