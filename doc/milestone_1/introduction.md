@@ -1,3 +1,0 @@
-# Introduction
-
-`placeholder for introduction`

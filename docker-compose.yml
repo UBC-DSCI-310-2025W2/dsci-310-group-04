@@ -6,15 +6,18 @@
 # "docker run" command with many flags.
 #
 # HOW TO USE:
-#   docker compose up
+#   docker compose up -d
 #
 # Then open the URL printed in the terminal (starts with
 # http://127.0.0.1:8888/lab?token=...)
 # ============================================================
-version: "3"
 
 services:
   analysis-env:
     image: awong62/dsci-310-group-04:latest
+
+    # do this on local
+    # image: dsci-310-group-04:latest
+
     ports:
       - "8888:8888"
