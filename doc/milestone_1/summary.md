@@ -1,3 +1,6 @@
 # Summary
 
-`placeholder for summary`
+In this project we try to predict whether an online shopping session will end in a purchase. That’s useful for understanding which users are likely to buy and for supporting efforts on how to improve conversion rates and user experience.
+We use the UCI Online Shoppers Purchasing Intention dataset. It’s public and has about 12,330 sessions. Each row is one session, and we have information on  how many admin vs product pages they saw, time on site, bounce and exit rates, and session data like month and whether it was a weekend. The target variable is Revenue which is a binary variable, indicating whether the session ended in a purchase.
+We downloaded the data from the web, cleaned it up (factors, missing values, etc.), and did an 80/20 train–test split. We did some EDA with summary tables and visualizations, then fit a Lasso logistic regression and looked at the confusion matrix and ROC curve.
+The model gets 0.926 AUC and 90% accuracy on the test set. It’s really good at flagging non-buyers (specificity around 96%) but not as good at catching buyers (sensitivity about 57%). So it’s better at “no” than “yes.” McNemar’s test says model’s predictions are significantly better than the no-information rate, so the model is useful despite the class imbalance.
