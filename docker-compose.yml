@@ -7,6 +7,9 @@
 #
 # HOW TO USE:
 #   docker compose up -d
+# 
+# HOW TO TURN OFF:
+#   docker compose down
 #
 # Then open the URL printed in the terminal (starts with
 # http://127.0.0.1:8888/lab?token=...)
