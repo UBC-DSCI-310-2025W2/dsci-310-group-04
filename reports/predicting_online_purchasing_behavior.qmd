@@ -1,0 +1,31 @@
+---
+title: "DSCI 310 Group 4 Data Analysis Project - Predicting Consumer Online Purchasing Behavior"
+author: "Athena Wong, Gracie Shao, Oscar Yik, and Raghav Vashisht"
+editor: source
+markdown:
+  wrap: 72
+bibliography: references/references.bib
+execute:
+  echo: false
+  eval: true
+  output: true
+engine: knitr
+---
+
+# Predicting Online Purchasing Behaviour Using LASSO Logistic Regression
+
+{{< include fragments/01_summary.qmd >}}
+
+{{< include fragments/02_introduction.qmd >}}
+
+{{< include fragments/03_data_loading.qmd >}}
+
+{{< include fragments/04_data_cleaning.qmd >}}
+
+{{< include fragments/05_eda.qmd >}}
+
+{{< include fragments/06_data_modelling.qmd >}}
+
+{{< include fragments/07_discussion.qmd >}}
+
+{{< include fragments/08_references.qmd >}}

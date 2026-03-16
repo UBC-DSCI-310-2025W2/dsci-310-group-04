@@ -1,0 +1,76 @@
+## Methods and Results 
+
+### Imports 
+```{r}
+library(tidyverse)
+library(glmnet)
+library(scales)
+library(pROC)
+library(caret)
+```
+### Load Data
+
+To start off the analysis, we first need to load all the data from the internet. We will also split the data into features and targets right now for convenience.
+
+```{r}
+csv_path <- "data/raw/online_shoppers_purchasing_intention_dataset.csv"
+raw_shoppers_data <- read_csv(csv_path)
+
+raw_shoppers_features <- raw_shoppers_data %>% select(-Revenue)
+raw_shoppers_targets <- raw_shoppers_data %>% select(Revenue)
+```
+
+Let us quickly get a brief overview of the data to make sure it was loaded properly.
+
+```{r}
+dim(raw_shoppers_features)
+dim(raw_shoppers_targets)
+```
+
+### Dataset Description
+With the data loaded successfully, we can examine the available features. This information is referenced from the official data source (UCI Machine Learning Repository: Online Shoppers Purchasing Intention Dataset).
+Each row/data point represents one user session.
+
+::: {#tbl-numerical-feature-description}
+
+| Feature  | Type | Feature Description |
+|----------------|-------------|------------------------|
+| Administrative  | Integer | Number of administrative pages viewed per session |
+| Administrative_Duration  | Integer | Total time spent on administrative pages per session |
+| Informational  | Integer | Number of informational pages viewed per session |
+| Informational_Duration  | Integer | Total time spent on informational pages per session |
+| ProductRelated  | Integer | Number of product related pages viewed per session |
+| ProductRelated_Duration  | Continuous | Number of product related pages viewed per session |
+| BounceRates  | Continuous | Inverse of engagement rate (From Google Analytics) |
+| ExitRates  | Continuous | Last page before stopping the user session (From Google Analytics) |
+| PageValues  |  Integer | Average value each page contributes to the user session (From Google Analytics) |
+| SpecialDay  | Integer | Closeness of the site visited date to a "special date" where purchase are more likely |
+
+Numerical Features
+:::
+
+::: {#tbl-categorical-feature-description}
+
+| Feature  | Feature Description |
+|----------------|-------------|
+| Month  | Month of session |
+| OperatingSystems | Operating system used for session |
+| Browser  | Browser used for session |
+| Region | Geographic region of session |
+| TrafficType | Traffic source of session (banner, direct, SMS, etc.) |
+| VisitorType | Visitor type of session (New, Returning, etc.) |
+| Weekend  | Binary value indicating the session occurred on a weekend |
+
+Categorical Features
+:::
+
+::: {#tbl-target-variable-description}
+
+| Target Variable  | Variable Description |
+|----------------|-------------|
+| Revenue  | Binary class label indicating whether the user session ended in a purchase |
+
+Target Variable
+:::
+
+Knowing the expected data types of each feature, we can proceed with data cleaning to prepare for EDA and analysis.
