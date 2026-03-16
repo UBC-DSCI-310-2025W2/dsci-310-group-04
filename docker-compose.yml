@@ -12,15 +12,22 @@
 #   docker compose down
 #
 # Then open the URL printed in the terminal (starts with
-# http://127.0.0.1:8888/lab?token=...)
+# http://127.0.0.1:8787)
+# 
+# Credentials for login: 
+# - username = rstudio
+# - password = password 
+#
 # ============================================================
 
 services:
   analysis-env:
-    image: awong62/dsci-310-group-04:latest
+    # image: awong62/dsci-310-group-04:latest
 
     # do this on local
-    # image: dsci-310-group-04:latest
+    image: dsci-310-project:quarto-0.0.1
 
+    environment:
+    - PASSWORD=password
     ports:
-      - "8888:8888"
+      - "8787:8787"
