@@ -1,0 +1,15 @@
+## Introduction
+
+Understanding what drives a visitor to complete a purchase is a central challenge in e-commerce. While generating web traffic is relatively easy, converting visits into sales relies on a complex combination of browsing behavior, timing, and user intent. Being able to predict whether a given session (before it ends) will result in revenue would enable online retailers to intervene in real time, personalize experiences, and allocate marketing resources more effectively (@Sakar2019 and @Esmeli2021).
+
+In this project, we aim to answer the question: Can we predict whether an online shopping session will result in a purchase based on the behavioral and contextual features recorded during that session?
+
+To address this, we utilize the Online Shoppers Purchasing Intention Dataset, sourced from the UCI Machine Learning Repository  (@online_shoppers_purchasing_intention_dataset_468). This dataset contains 12,330 sessions collected from an e-commerce website over the course of one year. Each session is characterized by 17 features, which fall into three categories: page interaction metrics (e.g., the number of product-related pages visited and the time spent on each page type), web analytics signals (e.g., bounce rate, exit rate, and page value), and session context (e.g., month, whether the visit occurred on a weekend, visitor type, operating system, browser, region, and traffic source). The binary target variable, "Revenue," indicates whether the session ended in a transaction.
+
+The dataset exhibits a notable class imbalance: approximately 84.5% of sessions did not result in a purchase, with only 15.5% ending in revenue. This imbalance is common in real-world e-commerce data and must be considered when evaluating model performance.
+
+We frame this as a binary classification problem and train a LASSO logistic regression model using the glmnet package in R. LASSO (Least Absolute Shrinkage and Selection Operator) is chosen for its ability to perform automatic feature selection by shrinking less informative coefficients to zero (@Li2022). This capability is particularly valuable given the mix of numeric, ordinal, and high-cardinality categorical features present in the dataset. 
+
+Before modeling, we conduct exploratory data analysis to assess feature distributions, class balance, and the relationships between key predictors and purchase outcomes. Categorical features with sparse levels are consolidated into an "Other" category, and right-skewed numeric features are log-transformed to reduce the impact of extreme outliers. The optimal regularization parameter, λ, is selected through cross-validated AUC.
+
+We evaluate model performance using the AUC-ROC on a held-out test set (20% of the data), along with a confusion matrix to examine precision and recall for the minority (purchase) class.

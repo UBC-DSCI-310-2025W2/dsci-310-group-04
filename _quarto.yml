@@ -1,0 +1,22 @@
+---
+title: "DSCI 310 Group 4 Data Analysis Project - Predicting Consumer Online Purchasing Behavior"
+
+project:
+  type: website
+  output-dir: docs
+  
+format:
+  html:
+    toc: true
+    toc-depth: 4
+  pdf:
+    toc: true
+    toc-depth: 4
+    colorlinks: true
+
+resources:
+  - results/
+
+knitr:
+  opts_knit:
+    root.dir: "."
