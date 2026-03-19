@@ -55,13 +55,16 @@ The analysis will follow the typical stages of a data science workflow:
 1. **Data Loading**  
    Import the dataset from the original source.
 
-2. **Exploratory Data Analysis (EDA)**  
+2. **Data Cleaning**
+   Data cleaning was performed to ensure data quality, consistency, and suitability for modeling.
+
+3. **Exploratory Data Analysis (EDA)**  
    Summarize the dataset and create visualizations to understand relationships between shopper's behavior and intention to purchase.
 
-3. **Modeling**  
+4. **Modeling**  
    Build a LASSO logistic regression model to predict ending with a transaction based on behavioral and demographic features.
 
-4. **Model Evaluation**  
+5. **Model Evaluation**  
    Evaluate the model's performance using appropriate metrics such as accuracy and confusion matrices.
 
 ---
@@ -96,7 +99,7 @@ docker run --rm -e PASSWORD="dsci" -p 8888:8888 purchase-intention-analysis
 
 ### 5. Open the Jupyter Notebook
 
-After launching the container, open the Jupyter link shown in the terminal and run the analysis notebook named 'milestone_1.ipynb' under reports/milestone_1.
+After launching the container, open the Jupyter link shown in the terminal and run the analysis notebook named 'predicting_online_purchasing_behavior.ipynb' under reports/.
 
 ---
 
@@ -111,11 +114,15 @@ After launching the container, open the Jupyter link shown in the terminal and r
 ├── .gitignore
 ├── LICENSE
 ├── Dockerfile
+├── docker-compose.yml
+├── renv.lock
+├── data/
+│   └──processed/
+│   └──raw/
 ├── docs/
 │   └──milestone_1/
 ├── reports/
-│   └── milestone_1/
-│      └── milestone_1.ipynb
+│   └──predicting_online_purchasing_behavior.ipynb
 └── .github/workflows/
     └── publish_docker_image.yml 
 ```
@@ -125,7 +132,7 @@ After launching the container, open the Jupyter link shown in the terminal and r
 # Dependencies
 
 This project requires the following software and R libraries:
-- rstudio(4.4.2)
+- rstudio(4.5.2)
 
 - tidyverse
 - glmnet
