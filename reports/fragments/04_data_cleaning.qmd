@@ -1,1 +1,52 @@
 ## Dataset Cleaning
+
+
+Before exploratory analysis and modeling, we cleaned and standardized the raw
+dataset to ensure that all variables had consistent types and that the target
+label was encoded correctly for classification.
+
+### Cleaning goals
+
+The raw data includes a mix of numeric and categorical variables, along with a
+binary target variable indicating whether a session ended in a purchase. The
+main goals of the cleaning step were to:
+
+- ensure categorical variables are stored as factors (e.g., `Month`,
+  `VisitorType`, and `Weekend`)
+- encode the target variable (`Revenue`) into clear class labels
+- remove incomplete rows so downstream steps do not fail due to missing values
+- create a reproducible training/testing split for evaluation
+
+### Type conversions and target encoding
+
+We converted categorical predictors to factors so that modeling treats them as
+categorical rather than numeric identifiers. The target variable, `Revenue`,
+was converted from its original logical encoding into a two-level factor with
+classes **Yes** (purchase) and **No** (no purchase). This makes the prediction
+task explicit and avoids ambiguity when computing evaluation metrics such as the
+confusion matrix and ROC curve.
+
+### Handling missing values
+
+To avoid inconsistencies between steps, rows with missing values were removed
+during preprocessing. This ensures that both exploratory visualizations and the
+final model are trained and evaluated on complete cases only.
+
+### Train/test split
+
+After cleaning, the dataset was partitioned into training and testing sets using
+a fixed random seed for reproducibility. We use an 80/20 split, where the
+training set is used to fit the model and the test set is held out for final
+evaluation. This separation is important to estimate how well the model is
+likely to perform on new user sessions.
+
+### Outputs of this step
+
+The cleaning pipeline produces two processed files:
+
+- a cleaned training dataset (used for EDA and model training)
+- a cleaned testing dataset (used only for final evaluation)
+
+These processed datasets are the inputs for the next stages of the analysis,
+including exploratory visualizations and fitting the LASSO logistic regression
+model.
