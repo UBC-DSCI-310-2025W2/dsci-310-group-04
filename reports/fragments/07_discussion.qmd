@@ -1,1 +1,21 @@
 ## Discussion
+
+### Summary of Findings
+
+Our LASSO logistic regression model demonstrates strong predictive ability for identifying online shopping sessions that will result in a purchase. The model achieves a test AUC well above 0.9, indicating that it can reliably distinguish purchasing from non-purchasing sessions across classification thresholds. Accuracy on the held-out test set is also high, though — given the class imbalance noted in @fig-roc and @tbl-confusion — the precision and recall figures for the positive (purchase) class are the more meaningful indicators of real-world utility.
+
+The LASSO penalty successfully reduced the feature space, retaining only the most informative predictors and setting the rest to zero (see @tbl-coef). The features with the largest positive coefficients align with intuitive expectations: page value (`PageValues`) is consistently the strongest predictor of purchase, reflecting that users who view high-value pages are more likely to convert. Behavioral signals such as time spent on product-related pages and lower bounce or exit rates also emerge as meaningful positive predictors. Conversely, sessions characterized by high exit rates or occurring in certain traffic sources are negatively associated with purchase intent.
+
+### Expected vs. Actual Results
+
+These results are broadly consistent with what we anticipated based on the existing literature. @Sakar2019 identified similar behavioral signals — particularly page value and exit rate — as key drivers of purchase intent. The strong performance of LASSO in this setting is also consistent with @Li2022, who demonstrated the effectiveness of L1-penalized models for imbalanced classification tasks. The one area of potential surprise is that the model performs well despite class imbalance (~84.5% negative class) without any resampling or class-weighting adjustments. This suggests that the predictive signal from the positive class is strong enough for LASSO to learn without additional balancing techniques.
+
+### Limitations and Impact
+
+Several limitations should be noted. First, the data was collected from a single e-commerce website over one year; the learned feature relationships may not generalize to other retail contexts, product categories, or time periods. Second, our analysis uses session-level aggregates (e.g. total time on product pages) rather than sequential clickstream data, which @Esmeli2021 showed can carry additional predictive signal for early intent prediction. Third, because we applied log1p transforms and factor collapsing based on the full training set, there is a minor risk that the specific collapsing thresholds (e.g., which `TrafficType` levels were merged into "Other") were chosen in a way that is somewhat dataset-specific.
+
+Despite these limitations, a model of this quality has meaningful practical implications. An e-commerce platform could integrate such a model to identify in real time which sessions are likely to convert, enabling targeted interventions — personalized promotions, proactive chat support, or curated product recommendations — at precisely the moments they are most likely to influence a purchase decision. Even modest improvements in conversion rate translate to substantial revenue gains at scale.
+
+### Future Directions
+
+This work raises several interesting follow-up questions. First, would incorporating sequential clickstream features (e.g., the order in which page types are visited) improve recall for the minority class, as suggested by @Esmeli2021? Second, would resampling techniques such as SMOTE, or class-weighted loss, improve recall for the positive class without sacrificing precision? Third, since the dataset spans a full year, temporal cross-validation — training on earlier months and testing on later ones — would provide a more realistic estimate of how the model performs when deployed prospectively. Finally, exploring non-linear models (e.g., gradient boosted trees) as a comparison baseline would clarify how much predictive signal is left on the table by the linear LASSO assumption.

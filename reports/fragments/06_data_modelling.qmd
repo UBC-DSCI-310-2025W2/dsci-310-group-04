@@ -1,1 +1,68 @@
-## Methods
+## Methods and Results — Modelling
+
+### LASSO Logistic Regression
+
+With the cleaned and preprocessed training data in hand, we fit a LASSO (Least Absolute Shrinkage and Selection Operator) logistic regression model using the `glmnet` package in R (@Li2022). LASSO is well suited to this dataset because the L1 penalty it applies during fitting can shrink the coefficients of irrelevant or redundant features exactly to zero, performing automatic feature selection alongside estimation. This is particularly useful given that our feature matrix — after one-hot encoding all categorical variables — is moderately high-dimensional.
+
+Before fitting, all numeric features are standardized (mean zero, unit variance) using parameters computed **only** from the training set. This is a critical step to prevent data leakage: the same training-set means and standard deviations are applied to the test set, so the model never indirectly learns from test data during preprocessing.
+
+We select the optimal regularization parameter, λ, through 10-fold cross-validation, maximizing the area under the ROC curve (AUC) as the selection criterion. @fig-cv-lambda shows how cross-validated AUC changes across the regularization path. The vertical dashed line marks the value of λ that maximizes AUC (`lambda.min`), which is used to fit the final model on the full training set.
+
+```{r}
+#| label: fig-cv-lambda
+#| fig-cap: "Cross-validated AUC across the LASSO regularization path. The left dashed line marks lambda.min (maximum AUC); the right marks lambda.1se."
+#| fig-width: 8
+#| fig-height: 5
+#| echo: false
+knitr::include_graphics(here::here("results/lasso_cv_plot.png"))
+```
+
+### Model Evaluation
+
+The final model is evaluated on the held-out 20% test set. We report four complementary metrics in @tbl-metrics: test AUC, accuracy, precision, and recall. Because the dataset is class-imbalanced (~84.5% non-purchase sessions), accuracy alone would be misleading; AUC and recall for the minority (purchase) class are the more informative indicators of real-world performance.
+
+```{r}
+#| label: tbl-metrics
+#| tbl-cap: "Summary of LASSO logistic regression performance on the held-out test set."
+#| echo: false
+library(tidyverse)
+library(knitr)
+metrics <- read_csv(here::here("results/model_metrics.csv"), show_col_types = FALSE)
+kable(metrics, col.names = c("Metric", "Value"), align = c("l", "r"))
+```
+
+The ROC curve for the test set is shown in @fig-roc. The curve traces the trade-off between true positive rate (sensitivity) and false positive rate (1 − specificity) across all classification thresholds, with a larger area under the curve indicating better discriminative ability. A random classifier would follow the diagonal dashed line (AUC = 0.5).
+
+```{r}
+#| label: fig-roc
+#| fig-cap: "ROC curve for the final LASSO model evaluated on the held-out test set."
+#| fig-width: 6
+#| fig-height: 5.5
+#| echo: false
+knitr::include_graphics(here::here("results/roc_curve.png"))
+```
+
+@tbl-confusion shows the confusion matrix, breaking down the model's predictions into true positives, true negatives, false positives, and false negatives. This reveals how the model balances identifying purchase sessions (the positive class) against avoiding false alarms.
+
+```{r}
+#| label: tbl-confusion
+#| tbl-cap: "Confusion matrix for the final LASSO model on the held-out test set (positive class = 'Yes', i.e. a purchase occurred)."
+#| echo: false
+cm <- read_csv(here::here("results/confusion_matrix.csv"), show_col_types = FALSE)
+cm_wide <- cm %>%
+  pivot_wider(names_from = Actual, values_from = Count) %>%
+  rename(Predicted = Predicted)
+kable(cm_wide)
+```
+
+### Selected Features
+
+@tbl-coef lists the features retained by LASSO (i.e., those with non-zero coefficients after regularization), ranked by absolute coefficient magnitude. A positive coefficient indicates a feature associated with a higher predicted probability of purchase, while a negative coefficient is associated with a lower probability.
+
+```{r}
+#| label: tbl-coef
+#| tbl-cap: "Non-zero LASSO coefficients for the final model, ranked by absolute magnitude."
+#| echo: false
+coef_df <- read_csv(here::here("results/lasso_coefficients.csv"), show_col_types = FALSE)
+kable(coef_df, col.names = c("Feature", "Coefficient"), digits = 4, align = c("l", "r"))
+```
