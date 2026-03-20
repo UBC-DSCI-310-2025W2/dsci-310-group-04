@@ -1,1 +1,38 @@
 ## EDA
+
+To start off, let us explore the extent of outliers in the numerical features through boxplots. 
+We know from `Table 4` that `BounceRates` and `ExitRates` are much smaller in magnitude than the other features so we plot them separately.
+
+![Boxplots of Numeric Features](../results/eda_figure1.png){#fig-1}
+
+![Boxplots of BounceRates and ExitRates Features](../results/eda_figure2.png){#fig-2}
+
+From the boxplots in @fig-1, it appears that the outliers severely skew the numerical features in the training set. 
+This can affect the linearity of the model so we will apply a `log1p(x)` transformation to the numerical features.
+We exclude `BounceRates` and `ExitRates` since the skew is not as severe. 
+
+![Boxplots of Numeric Features](../results/eda_figure3.png){#fig-3}
+
+After applying the transformation, the plots appear more centred though there are still a few rough spots.
+This should be sufficient to continue the analysis. 
+Next, we would like to explore some obvious trends. We will first isolate variables of interest and develop some visualizations. 
+
+One interesting trend is examining how purchase rates vary by the number of visits to product related pages.
+We can enhance the visualization by examining if the trend is consistent across weekends and weekdays.
+
+![Purchase Rate by Product Pages Visited](../results/eda_figure4.png){#fig-4}
+
+From @fig-4, it appears that there is a positive trend between purchase rate and number of product pages visited. 
+It is also consistent across weekends and weekdays. This is expected since users may feel more attracted to a purchase the longer they engage with the website. 
+It could very well also be because users need to engage with the website longer to compare options when a decision to purchase has already been made.
+Next, we can explore how exit rates directly affect the purchase outcome and compared across.
+
+![Exit Rates vs Purchase Outcome](../results/eda_figure5.png){#fig-5}
+
+From @fig-5, it appears that there is a strong correlation between a high exit rate and the decision not to purchase.
+This is displayed by the median of the box plots being consistently higher in the "No" purchase outcome than the "Yes" purchase outcome. 
+This could be because the decision to purchase has already been made before ending the user session. 
+The plots also appear to have increase variance and gap between medians as it gets closer to a "special day".
+
+This concludes the EDA and allows us to move on to the Analysis section to build the LASSO Logistic Regression model.
+
