@@ -17,7 +17,7 @@ Using the **Online Shoppers Purchasing Intention Dataset**, we perform explorato
 
 In addition to answering this research question, this project emphasizes **reproducible data science practices**, including version control using GitHub, virtual environment set up, literate programming using Jupyter notebooks using R, and containerized computational environments using Docker.
 
-We concluded that ...
+We concluded that session-level browsing behavior provides meaningful signals for predicting purchase intent, achieving strong overall performance (AUC = 0.926, accuracy ≈ 90%), but the pronounced class imbalance limits the model’s ability to detect purchasing sessions, resulting in substantially lower sensitivity compared to specificity.
 
 ---
 
@@ -106,8 +106,8 @@ After launching the container, open your browser and go to:
 http://127.0.0.1:8787
 ```
 Log in using:
-	•	Username: rstudio
-	•	Password: dsci
+- Username: rstudio
+- Password: dsci
 
 
 # Running the analysis with the Makefile
@@ -122,7 +122,6 @@ This will generate the final report at reports/predicting_online_purchasing_beha
 ```bash
 make clean-all
 ```
-...
 
 ---
 
