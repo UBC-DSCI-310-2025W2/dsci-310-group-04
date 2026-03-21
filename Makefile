@@ -101,4 +101,4 @@ clean-report:
 	rm -f reports/predicting_online_purchasing_behavior.html
 	rm -rf reports/predicting_online_purchasing_behavior_files
 
-clean-all: clean-data clean-results clean-report
+clean-all: clean-data clean-results clean-report 
