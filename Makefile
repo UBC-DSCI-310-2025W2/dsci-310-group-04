@@ -2,7 +2,7 @@
 # DSCI 310 Group 04, Milestone 2
 #
 # This driver script runs the full analysis pipeline for predicting online
-# purchase intention. It:
+# purchase intention. It :
 # 1) downloads the dataset,
 # 2) cleans and splits it into train/test,
 # 3) generates EDA artifacts (figures/tables),
