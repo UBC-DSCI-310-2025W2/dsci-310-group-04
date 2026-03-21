@@ -17,6 +17,8 @@ Using the **Online Shoppers Purchasing Intention Dataset**, we perform explorato
 
 In addition to answering this research question, this project emphasizes **reproducible data science practices**, including version control using GitHub, virtual environment set up, literate programming using Jupyter notebooks using R, and containerized computational environments using Docker.
 
+We concluded that ...
+
 ---
 
 # Research Question
@@ -35,13 +37,13 @@ https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dat
 
 The dataset contains shopper's demographic and behavior information, including variables such as:
 
-- Administrative
-- Informational
-- ProductRelated
-- BounceRates
-- SpecialDay
-- Region
-- VisitorType
+- `Administrative`
+- `Informational`
+- `ProductRelated`
+- `BounceRates`
+- `SpecialDay`
+- `Region`
+- `VisitorType`
 - etc.
 
 The target variable used in this project is **Revenuw**, which is a **binary** variable that indicates whether the visit has been **finalized with a transaction**.
@@ -94,12 +96,33 @@ docker build -t purchase-intention-analysis .
 ### 4. Run the Docker container
 
 ```bash
-docker run --rm -e PASSWORD="dsci" -p 8888:8888 purchase-intention-analysis
+docker run --rm -e PASSWORD="dsci" -p 8787:8787 purchase-intention-analysis
 ```
 
-### 5. Open the Jupyter Notebook
+### 5. Open RStudio Server
 
-After launching the container, open the Jupyter link shown in the terminal and run the analysis notebook named 'predicting_online_purchasing_behavior.ipynb' under reports/.
+After launching the container, open your browser and go to:
+```bash
+http://127.0.0.1:8787
+```
+Log in using:
+	•	Username: rstudio
+	•	Password: dsci
+
+
+# Running the analysis with the Makefile
+
+### Run the full analysis pipeline:
+```bash
+make all
+```
+This will generate the final report at reports/predicting_online_purchasing_behavior.html
+
+### To remove all generated data, results, and reports, run:
+```bash
+make clean-all
+```
+...
 
 ---
 
@@ -112,17 +135,20 @@ After launching the container, open the Jupyter link shown in the terminal and r
 ├── CONTRIBUTING.md
 ├── CODEOWNERS
 ├── .gitignore
-├── LICENSE
+├── LICENSE.md
+├── Makefile
+├── _quarto.yml
 ├── Dockerfile
 ├── docker-compose.yml
 ├── renv.lock
 ├── data/
 │   └──processed/
 │   └──raw/
-├── docs/
-│   └──milestone_1/
 ├── reports/
-│   └──predicting_online_purchasing_behavior.ipynb
+│   └── references/references.bib
+│   └── predicting_online_purchasing_behavior.ipynb
+├── src/
+│   └──*.R
 └── .github/workflows/
     └── publish_docker_image.yml 
 ```
@@ -131,15 +157,18 @@ After launching the container, open the Jupyter link shown in the terminal and r
 
 # Dependencies
 
-This project requires the following software and R libraries:
-- rstudio(4.5.2)
+This project uses R (version 4.5.2) and manages package dependencies using renv to ensure reproducibility.
 
-- tidyverse
-- glmnet
-- ucimlrepo
-- scales
-- pROC
-- caret
+Key packages include:
+- tidyverse (2.0.0)
+- glmnet (4.1-10)
+- scales (1.4.0)
+- pROC (1.19.0.1)
+- caret (7.0-1)
+
+All package versions are recorded in the renv.lock file.
+
+More information about renv.lock used in our project can be found [here](https://github.com/UBC-DSCI-310-2025W2/dsci-310-group-04/blob/main/renv.lock)
 
 ---
 
