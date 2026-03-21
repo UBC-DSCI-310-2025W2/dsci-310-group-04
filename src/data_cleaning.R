@@ -48,6 +48,17 @@ main <- function(input_file_path, output_dir, seed, split) {
     drop_na() %>%
     droplevels()
 
+  # log1p transform right-skewed engagement variables
+  cleaned <- cleaned %>%
+    mutate(
+      Administrative_Duration = log1p(Administrative_Duration),
+      Informational_Duration = log1p(Informational_Duration),
+      PageValues = log1p(PageValues),
+      ProductRelated = log1p(ProductRelated),
+      ProductRelated_Duration = log1p(ProductRelated_Duration),
+      Revenue_num = if_else(Revenue == "Yes", 1L, 0L)
+    )
+
   n <- nrow(cleaned)
   train_idx <- sample.int(n, size = floor(split * n))
 
