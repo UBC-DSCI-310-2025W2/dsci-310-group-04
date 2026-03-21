@@ -5,7 +5,7 @@ We know from `Table 4` that `BounceRates` and `ExitRates` are much smaller in ma
 
 ![Boxplots of Numeric Features](../results/eda_figure1.png){#fig-1}
 
-![Boxplots of BounceRates and ExitRates Features](../results/eda_figure2.png){#fig-2}
+![Boxplots of BounceRates and ExitRates](../results/eda_figure2.png){#fig-2 width=80% height=80%}
 
 From the boxplots in @fig-1, it appears that the outliers severely skew the numerical features in the training set. 
 This can affect the linearity of the model so we will apply a `log1p(x)` transformation to the numerical features.
