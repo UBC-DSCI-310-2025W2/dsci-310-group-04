@@ -1,52 +1,83 @@
 ## Dataset Cleaning
 
+Before exploratory analysis, we preprocess the raw online shopping dataset so
+that variable types are consistent and ready for plotting and modeling.
 
-Before exploratory analysis and modeling, we cleaned and standardized the raw
-dataset to ensure that all variables had consistent types and that the target
-label was encoded correctly for classification.
+### Data type preparation
 
-### Cleaning goals
+The dataset contains both numerical and categorical predictors. To avoid
+treating category labels as continuous values, we convert key categorical
+columns to factors. We also encode the target variable `Revenue` as a factor
+(No, Yes) for binary classification.
 
-The raw data includes a mix of numeric and categorical variables, along with a
-binary target variable indicating whether a session ended in a purchase. The
-main goals of the cleaning step were to:
+::: {#tbl-factor-conversions}
 
-- ensure categorical variables are stored as factors (e.g., `Month`,
-  `VisitorType`, and `Weekend`)
-- encode the target variable (`Revenue`) into clear class labels
-- remove incomplete rows so downstream steps do not fail due to missing values
-- create a reproducible training/testing split for evaluation
+| Variable | Raw Type | Converted To |
+|----------|----------|--------------|
+| Revenue | Logical/Character | Factor (No, Yes) |
+| Month | Character | Factor |
+| OperatingSystems | Integer | Factor |
+| Browser | Integer | Factor |
+| Region | Integer | Factor |
+| TrafficType | Integer | Factor |
+| VisitorType | Character | Factor |
+| Weekend | Logical | Factor |
 
-### Type conversions and target encoding
+Variables converted to factors in data_cleaning.R
+:::
 
-We converted categorical predictors to factors so that modeling treats them as
-categorical rather than numeric identifiers. The target variable, `Revenue`,
-was converted from its original logical encoding into a two-level factor with
-classes **Yes** (purchase) and **No** (no purchase). This makes the prediction
-task explicit and avoids ambiguity when computing evaluation metrics such as the
-confusion matrix and ROC curve.
+Rows with missing values are dropped, and unused factor levels are removed
+via `droplevels()`.
 
-### Handling missing values
+### Transformation of skewed variables
 
-To avoid inconsistencies between steps, rows with missing values were removed
-during preprocessing. This ensures that both exploratory visualizations and the
-final model are trained and evaluated on complete cases only.
+Several engagement variables are strongly right-skewed in their raw form. To
+reduce skewness and improve interpretability in downstream plots (e.g., in
+EDA), we apply `log1p` transformations to:
 
-### Train/test split
+::: {#tbl-log1p-transformations}
 
-After cleaning, the dataset was partitioned into training and testing sets using
-a fixed random seed for reproducibility. We use an 80/20 split, where the
-training set is used to fit the model and the test set is held out for final
-evaluation. This separation is important to estimate how well the model is
-likely to perform on new user sessions.
+| Variable | Reason for Transformation |
+|----------|---------------------------|
+| Administrative_Duration | Right-skewed; compresses extreme values |
+| Informational_Duration | Right-skewed; compresses extreme values |
+| PageValues | Right-skewed; compresses extreme values |
+| ProductRelated | Right-skewed; compresses extreme values |
+| ProductRelated_Duration | Right-skewed; compresses extreme values |
 
-### Outputs of this step
+Engagement variables transformed with log1p (keeps zeros valid)
+:::
 
-The cleaning pipeline produces two processed files:
+This transformation keeps zero values valid while compressing extreme values.
 
-- a cleaned training dataset (used for EDA and model training)
-- a cleaned testing dataset (used only for final evaluation)
+### Derived variables for analysis
 
-These processed datasets are the inputs for the next stages of the analysis,
-including exploratory visualizations and fitting the LASSO logistic regression
-model.
+For purchase-rate visualizations, we create a binary indicator:
+
+::: {#tbl-derived-variables}
+
+| Variable | Description |
+|----------|-------------|
+| Revenue_num | Binary indicator: 1 = purchase, 0 = no purchase (used for purchase-rate plots) |
+
+:::
+
+This allows us to summarize purchase probability across bins of browsing
+activity and compare behavior between weekday and weekend sessions.
+
+### Output for downstream analysis
+
+After cleaning and transformation, the data are split into training and test
+sets and written to CSV files for EDA and modeling:
+
+::: {#tbl-cleaning-outputs}
+
+| Output File | Description |
+|-------------|-------------|
+| shoppers_train.csv | Training subset (~80% of cleaned data) |
+| shoppers_test.csv | Test subset (~20% of cleaned data) |
+
+:::
+
+The split uses a default proportion of 0.8 for training and 0.2 for testing,
+with random seed 310 for reproducibility.
