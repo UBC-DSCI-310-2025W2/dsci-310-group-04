@@ -182,11 +182,14 @@ make clean-all
 This project uses R (version 4.5.3) and manages package dependencies using renv to ensure reproducibility.
 
 Key packages include:
-- tidyverse (2.0.0)
-- glmnet (4.1-10)
-- scales (1.4.0)
-- pROC (1.19.0.1)
 - caret (7.0-1)
+- docopt (0.7.2)
+- glmnet (4.1-10)
+- pROC (1.19.0.1)
+- renv (1.1.8)
+- rmarkdown (2.30)
+- scales (1.4.0)
+- tidyverse (2.0.0)
 
 All package versions are recorded in the renv.lock file.
 
