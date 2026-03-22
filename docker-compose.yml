@@ -33,4 +33,8 @@ services:
       - "8787:8787"
 
     volumes:
+      - ./data:/home/rstudio/work/data
+      - ./reports:/home/rstudio/work/reports
+      - ./results:/home/rstudio/work/results
+      - ./src:/home/rstudio/work/src
       - ./docs:/home/rstudio/work/docs

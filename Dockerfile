@@ -30,8 +30,7 @@ COPY --chown=rstudio:rstudio renv.lock .
 RUN Rscript -e "install.packages('renv', repos='https://cloud.r-project.org')" && \
     Rscript -e "renv::restore(lockfile='/home/rstudio/work/renv.lock', repos = c(CRAN = 'https://packagemanager.posit.co/cran/__linux__/noble/latest'), prompt=FALSE)"
 
-# Copy the analysis notebook into the image
-COPY --chown=rstudio:rstudio . .
+COPY --chown=rstudio:rstudio Makefile _quarto.yml .
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
