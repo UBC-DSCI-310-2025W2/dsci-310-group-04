@@ -1,7 +1,7 @@
 ## EDA
 
 To start off, let us explore the extent of outliers in the numerical features through boxplots. 
-We know from `Table 4` that `BounceRates` and `ExitRates` are much smaller in magnitude than the other features so we plot them separately.
+We know that `BounceRates` and `ExitRates` are much smaller in magnitude than the other features so we plot them separately.
 
 ![Boxplots of Numeric Features](../results/eda_figure1.png){#fig-1}
 

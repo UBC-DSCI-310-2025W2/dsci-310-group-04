@@ -17,6 +17,8 @@ Using the **Online Shoppers Purchasing Intention Dataset**, we perform explorato
 
 In addition to answering this research question, this project emphasizes **reproducible data science practices**, including version control using GitHub, virtual environment set up, literate programming using Jupyter notebooks using R, and containerized computational environments using Docker.
 
+We concluded that session-level browsing behavior provides meaningful signals for predicting purchase intent, achieving strong overall performance (AUC = 0.926, accuracy ≈ 90%), but the pronounced class imbalance limits the model’s ability to detect purchasing sessions, resulting in substantially lower sensitivity compared to specificity.
+
 ---
 
 # Research Question
@@ -35,16 +37,16 @@ https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dat
 
 The dataset contains shopper's demographic and behavior information, including variables such as:
 
-- Administrative
-- Informational
-- ProductRelated
-- BounceRates
-- SpecialDay
-- Region
-- VisitorType
+- `Administrative`
+- `Informational`
+- `ProductRelated`
+- `BounceRates`
+- `SpecialDay`
+- `Region`
+- `VisitorType`
 - etc.
 
-The target variable used in this project is **Revenuw**, which is a **binary** variable that indicates whether the visit has been **finalized with a transaction**.
+The target variable used in this project is **Revenue**, which is a **binary** variable that indicates whether the visit has been **finalized with a transaction**.
 
 ---
 
@@ -85,17 +87,58 @@ git clone https://github.com/UBC-DSCI-310-2025W2/dsci-310-group-04.git
 cd dsci-310-group-04
 ```
 
-### 3. Run the Docker compose project
+### 3. Start the Docker Compose environment
 
 ```bash
 docker compose up -d
 ```
 
-### 4. Wait ~1-2 minutes for the analysis + scripts to complete
+### 4. Wait for the analysis to complete
+The analysis pipeline will run automatically inside the container.
+Please allow approximately 1–2 minutes for all scripts to finish executing.
 
-### 5. Check the `docs/reports` folder for the compiled reports
+### 5. View the output
+Once the analysis is complete, the rendered reports will be available in:
 
-### (Optional) 6. Navigate to http://localhost:8787 on a browser to access the Rstudio development environment
+```bash
+docs/reports
+```
+
+### 6. (Optional) Access the RStudio environment
+
+After launching the container, open your browser and go to:
+```bash
+http://127.0.0.1:8787
+or
+http://localhost:8787
+```
+Log in using:
+- Username: rstudio
+- Password: password
+
+### 7. Stop the container
+```bash
+docker compose down
+```
+
+
+# Running the Analysis with the Makefile (Optional)
+
+The analysis pipeline is automatically executed when running the project using Docker or Docker Compose via the `entrypoint.sh` script.
+
+However, if you are working inside the RStudio environment or running the project locally, you can manually execute the pipeline using the Makefile.
+
+### Run the full analysis pipeline
+
+```bash
+make all
+```
+This will generate the final report at reports/predicting_online_purchasing_behavior.html
+
+### To remove all generated files:
+```bash
+make clean-all
+```
 
 ---
 
@@ -108,17 +151,26 @@ docker compose up -d
 ├── CONTRIBUTING.md
 ├── CODEOWNERS
 ├── .gitignore
-├── LICENSE
-├── Dockerfile
+├── LICENSE.md
 ├── docker-compose.yml
+├── _quarto.yml
 ├── renv.lock
+├── Makefile
+├── Dockerfile
+├── entrypoint.sh
 ├── data/
 │   └──processed/
 │   └──raw/
-├── docs/
-│   └──milestone_1/
 ├── reports/
-│   └──predicting_online_purchasing_behavior.ipynb
+│   └── fragments/
+│   └── references/references.bib
+│   └── predicting_online_purchasing_behavior.ipynb
+│   └── predicting_online_purchasing_behavior.qmd
+├── src/
+│   └──0*_*.R
+├── results/
+├── renv/
+├── docs/
 └── .github/workflows/
     └── publish_docker_image.yml 
 ```
@@ -126,18 +178,21 @@ docker compose up -d
 ---
 
 # Dependencies
+This project uses R (version 4.5.3) and manages package dependencies using renv to ensure reproducibility.
 
-This project requires the following software and R libraries:
-- rstudio(4.5.2)
+Key packages include:
+- caret (7.0-1)
+- docopt (0.7.2)
+- glmnet (4.1-10)
+- pROC (1.19.0.1)
+- renv (1.1.8)
+- rmarkdown (2.30)
+- scales (1.4.0)
+- tidyverse (2.0.0)
 
-- tidyverse
-- glmnet
-- scales
-- pROC
-- caret
-- docopt
-- rmarkdown
-- renv
+All package versions are recorded in the renv.lock file.
+
+More information about renv.lock used in our project can be found [here](https://github.com/UBC-DSCI-310-2025W2/dsci-310-group-04/blob/main/renv.lock)
 
 ---
 
