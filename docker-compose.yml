@@ -22,12 +22,15 @@
 
 services:
   analysis-env:
-    # image: awong62/dsci-310-group-04:latest
+    image: awong62/dsci-310-group-04:latest
 
-    # do this on local
-    image: dsci-310-project:quarto-0.0.1
+    # do this for local development
+    # image: dsci-310-project:quarto-0.0.1
 
     environment:
     - PASSWORD=password
     ports:
       - "8787:8787"
+
+    volumes:
+      - ./docs:/home/rstudio/work/docs
