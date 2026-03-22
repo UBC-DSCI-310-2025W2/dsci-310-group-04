@@ -6,20 +6,8 @@ library(tidyverse)
 library(knitr)
 ```
 
-### Load Data
-
-To start off the analysis, we first need to load all the data from the internet. We will also split the data into features and targets right now for convenience.
-
-```{r}
-csv_path <- "data/raw/online_shoppers_purchasing_intention_dataset.csv"
-raw_shoppers_data <- read_csv(csv_path)
-
-raw_shoppers_features <- raw_shoppers_data %>% select(-Revenue)
-raw_shoppers_targets <- raw_shoppers_data %>% select(Revenue)
-```
-
 ### Dataset Description
-With the data loaded successfully, we can examine the available features. This information is referenced from the official data source (UCI Machine Learning Repository: Online Shoppers Purchasing Intention Dataset).
+To start off the analysis, we can examine the available features in the data. This information is referenced from the official data source (UCI Machine Learning Repository: Online Shoppers Purchasing Intention Dataset).
 Each row/data point represents one user session.
 
 ::: {#tbl-numerical-feature-description}
