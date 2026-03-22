@@ -85,21 +85,17 @@ git clone https://github.com/UBC-DSCI-310-2025W2/dsci-310-group-04.git
 cd dsci-310-group-04
 ```
 
-### 3. Create a Docker image from the Dockerfile
+### 3. Run the Docker compose project
 
 ```bash
-docker build -t purchase-intention-analysis .
+docker compose up -d
 ```
 
-### 4. Run the Docker container
+### 4. Wait ~1-2 minutes for the analysis + scripts to complete
 
-```bash
-docker run --rm -e PASSWORD="dsci" -p 8888:8888 purchase-intention-analysis
-```
+### 5. Check the `docs/reports` folder for the compiled reports
 
-### 5. Open the Jupyter Notebook
-
-After launching the container, open the Jupyter link shown in the terminal and run the analysis notebook named 'predicting_online_purchasing_behavior.ipynb' under reports/.
+### (Optional) 6. Navigate to http://localhost:8787 on a browser to access the Rstudio development environment
 
 ---
 
@@ -136,10 +132,12 @@ This project requires the following software and R libraries:
 
 - tidyverse
 - glmnet
-- ucimlrepo
 - scales
 - pROC
 - caret
+- docopt
+- rmarkdown
+- renv
 
 ---
 

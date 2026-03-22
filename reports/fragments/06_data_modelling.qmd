@@ -1,5 +1,11 @@
 ## Methods and Results — Modelling
 
+```{r}
+#| include: false
+library(tidyverse)
+library(knitr)
+```
+
 ### LASSO Logistic Regression
 
 With the cleaned and preprocessed training data in hand, we fit a LASSO (Least Absolute Shrinkage and Selection Operator) logistic regression model using the `glmnet` package in R (@Li2022). LASSO is well suited to this dataset because the L1 penalty it applies during fitting can shrink the coefficients of irrelevant or redundant features exactly to zero, performing automatic feature selection alongside estimation. This is particularly useful given that our feature matrix — after one-hot encoding all categorical variables — is moderately high-dimensional.

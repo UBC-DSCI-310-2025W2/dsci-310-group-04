@@ -1,5 +1,11 @@
 ## Methods and Results 
 
+```{r}
+#| include: false
+library(tidyverse)
+library(knitr)
+```
+
 ### Load Data
 
 To start off the analysis, we first need to load all the data from the internet. We will also split the data into features and targets right now for convenience.

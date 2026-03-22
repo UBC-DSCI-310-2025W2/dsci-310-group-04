@@ -33,5 +33,8 @@ RUN Rscript -e "install.packages('renv', repos='https://cloud.r-project.org')" &
 # Copy the analysis notebook into the image
 COPY --chown=rstudio:rstudio . .
 
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 # Render the quarto report 
-CMD ["/init"]
+CMD ["/usr/local/bin/entrypoint.sh"]
