@@ -1,5 +1,13 @@
 ## Discussion
 
+### Key Metrics
+
+We use a few key metrics in this analysis: AUC, precision, recall, and accuracy. Here is a quick discussion on each:
+- AUC: Area under ROC curve represents the probability that the model ranks a random positive example higher than a random negative example
+- Precision: The proportion of positive identifications that were actually correct
+- Recall: The proportion of actual positives that were identified correctly
+- Accuracy: The overall proportion of correct predictions 
+
 ### Summary of Findings
 
 Our LASSO logistic regression model demonstrates strong predictive ability for identifying online shopping sessions that will result in a purchase. The model achieves a test AUC well above 0.9, indicating that it can reliably distinguish purchasing from non-purchasing sessions across classification thresholds. Accuracy on the held-out test set is also high, though — given the class imbalance noted in @fig-roc and @tbl-confusion — the precision and recall figures for the positive (purchase) class are the more meaningful indicators of real-world utility.
