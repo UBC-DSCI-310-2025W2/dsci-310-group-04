@@ -46,7 +46,7 @@ The dataset contains shopper's demographic and behavior information, including v
 - `VisitorType`
 - etc.
 
-The target variable used in this project is **Revenuw**, which is a **binary** variable that indicates whether the visit has been **finalized with a transaction**.
+The target variable used in this project is **Revenue**, which is a **binary** variable that indicates whether the visit has been **finalized with a transaction**.
 
 ---
 
@@ -87,38 +87,55 @@ git clone https://github.com/UBC-DSCI-310-2025W2/dsci-310-group-04.git
 cd dsci-310-group-04
 ```
 
-### 3. Create a Docker image from the Dockerfile
+### 3. Start the Docker Compose environment
 
 ```bash
-docker build -t purchase-intention-analysis .
+docker compose up -d
 ```
 
-### 4. Run the Docker container
+### 4. Wait for the analysis to complete
+The analysis pipeline will run automatically inside the container.
+Please allow approximately 1–2 minutes for all scripts to finish executing.
+
+### 5. View the output
+Once the analysis is complete, the rendered reports will be available in:
 
 ```bash
-docker run --rm -e PASSWORD="dsci" -p 8787:8787 purchase-intention-analysis
+docs/reports
 ```
 
-### 5. Open RStudio Server
+### 6. (Optional) Access the RStudio environment
 
 After launching the container, open your browser and go to:
 ```bash
 http://127.0.0.1:8787
+or
+http://localhost:8787
 ```
 Log in using:
 - Username: rstudio
-- Password: dsci
+- Password: password
+
+### 7. Stop the container
+```bash
+docker compose down
+```
 
 
-# Running the analysis with the Makefile
+# Running the Analysis with the Makefile (Optional)
 
-### Run the full analysis pipeline:
+The analysis pipeline is automatically executed when running the project using Docker or Docker Compose via the `entrypoint.sh` script.
+
+However, if you are working inside the RStudio environment or running the project locally, you can manually execute the pipeline using the Makefile.
+
+### Run the full analysis pipeline
+
 ```bash
 make all
 ```
 This will generate the final report at reports/predicting_online_purchasing_behavior.html
 
-### To remove all generated data, results, and reports, run:
+### To remove all generated files:
 ```bash
 make clean-all
 ```
@@ -135,19 +152,26 @@ make clean-all
 ├── CODEOWNERS
 ├── .gitignore
 ├── LICENSE.md
-├── Makefile
-├── _quarto.yml
-├── Dockerfile
+├── .Rhistory
 ├── docker-compose.yml
+├── _quarto.yml
 ├── renv.lock
+├── Makefile
+├── Dockerfile
+├── entrypoint.sh
 ├── data/
 │   └──processed/
 │   └──raw/
 ├── reports/
+│   └── fragments/
 │   └── references/references.bib
 │   └── predicting_online_purchasing_behavior.ipynb
+│   └── predicting_online_purchasing_behavior.qmd
 ├── src/
-│   └──*.R
+│   └──0*_*.R
+├── results/
+├── renv/
+├── docs/
 └── .github/workflows/
     └── publish_docker_image.yml 
 ```
@@ -155,8 +179,7 @@ make clean-all
 ---
 
 # Dependencies
-
-This project uses R (version 4.5.2) and manages package dependencies using renv to ensure reproducibility.
+This project uses R (version 4.5.3) and manages package dependencies using renv to ensure reproducibility.
 
 Key packages include:
 - tidyverse (2.0.0)
