@@ -2,7 +2,7 @@
 # DSCI 310 Group 04, Milestone 2
 #
 # This driver script runs the full analysis pipeline for predicting online
-# purchase intention. It:
+# purchase intention. It :
 # 1) downloads the dataset,
 # 2) cleans and splits it into train/test,
 # 3) generates EDA artifacts (figures/tables),
@@ -24,8 +24,8 @@ all: reports/predicting_online_purchasing_behavior.html
 # -------------------------
 data: data/raw/online_shoppers_purchasing_intention_dataset.csv
 
-data/raw/online_shoppers_purchasing_intention_dataset.csv: src/data_loading.R
-	Rscript src/data_loading.R \
+data/raw/online_shoppers_purchasing_intention_dataset.csv: src/01_data_loading.R
+	Rscript src/01_data_loading.R \
 		--input_url="https://archive.ics.uci.edu/static/public/468/online+shoppers+purchasing+intention+dataset.zip" \
 		--output_file_path="data/raw/online_shoppers_purchasing_intention_dataset.csv"
 
@@ -35,36 +35,40 @@ data/raw/online_shoppers_purchasing_intention_dataset.csv: src/data_loading.R
 process: data/processed/shoppers_train.csv \
 	data/processed/shoppers_test.csv
 
-data/processed/shoppers_train.csv data/processed/shoppers_test.csv: src/data_cleaning.R data/raw/online_shoppers_purchasing_intention_dataset.csv
-	Rscript src/data_cleaning.R \
+data/processed/shoppers_train.csv data/processed/shoppers_test.csv: src/02_data_cleaning.R data/raw/online_shoppers_purchasing_intention_dataset.csv
+	Rscript src/02_data_cleaning.R \
 		--input_file_path="data/raw/online_shoppers_purchasing_intention_dataset.csv" \
-		--output_train_path="data/processed/shoppers_train.csv" \
-		--output_test_path="data/processed/shoppers_test.csv" \
+		--output_dir="data/processed" \
 		--seed=310 \
 		--split=0.8
 
 # -------------------------
 # EDA artifacts (script 3)
 # -------------------------
-eda: results/eda_purchase_rate.png \
-	results/eda_exit_rates.png
+eda: results/eda_figure1.png \
+	results/eda_figure2.png \
+	results/eda_figure3.png \
+	results/eda_figure4.png \
+	results/eda_figure5.png
 
-results/eda_purchase_rate.png results/eda_exit_rates.png: src/eda.R data/processed/shoppers_train.csv
-	Rscript src/eda.R \
+results/eda_figure1.png results/eda_figure2.png results/eda_figure3.png results/eda_figure4.png results/eda_figure5.png: src/03_eda.R data/processed/shoppers_train.csv
+	Rscript src/03_eda.R \
 		--input_file_path="data/processed/shoppers_train.csv" \
-		--output_dir="results"
+		--output_prefix="results/eda"
 
 # ------------------------------
 # model artifacts (script 4)
 # ------------------------------
 model: results/roc_curve.png \
 	results/model_metrics.csv \
-	results/confusion_matrix.csv
+	results/confusion_matrix.csv \
+	results/lasso_cv_plot.png \
+	results/lasso_coefficients.csv
 
-results/roc_curve.png results/model_metrics.csv results/confusion_matrix.csv: src/modeling.R data/processed/shoppers_train.csv data/processed/shoppers_test.csv
-	Rscript src/modeling.R \
-		--train_path="data/processed/shoppers_train.csv" \
-		--test_path="data/processed/shoppers_test.csv" \
+results/roc_curve.png results/model_metrics.csv results/confusion_matrix.csv results/lasso_cv_plot.png results/lasso_coefficients.csv: src/04_data_modelling.R data/processed/shoppers_train.csv data/processed/shoppers_test.csv
+	Rscript src/04_data_modelling.R \
+		--train="data/processed/shoppers_train.csv" \
+		--test="data/processed/shoppers_test.csv" \
 		--output_dir="results"
 
 # -------------------------
@@ -82,14 +86,26 @@ clean-data:
 		data/processed/shoppers_test.csv
 
 clean-results:
-	rm -f results/eda_purchase_rate.png \
-		results/eda_exit_rates.png \
+	rm -f results/eda_figure1.png \
+		results/eda_figure2.png \
+		results/eda_figure3.png \
+		results/eda_figure4.png \
+		results/eda_figure5.png \
+		results/lasso_cv_plot.png \
 		results/roc_curve.png \
 		results/model_metrics.csv \
-		results/confusion_matrix.csv
+		results/confusion_matrix.csv \
+		results/lasso_coefficients.csv
 
 clean-report:
 	rm -f reports/predicting_online_purchasing_behavior.html
 	rm -rf reports/predicting_online_purchasing_behavior_files
 
-clean-all: clean-data clean-results clean-report
+clean-docs:
+	rm -rf docs/reports
+	rm -rf docs/results
+	rm -rf docs/site_libs
+	rm -f docs/index.html
+	rm -f docs/search.json
+
+clean-all: clean-data clean-results clean-report clean-docs

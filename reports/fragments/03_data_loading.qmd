@@ -1,13 +1,11 @@
 ## Methods and Results 
 
-### Imports 
 ```{r}
+#| include: false
 library(tidyverse)
-library(glmnet)
-library(scales)
-library(pROC)
-library(caret)
+library(knitr)
 ```
+
 ### Load Data
 
 To start off the analysis, we first need to load all the data from the internet. We will also split the data into features and targets right now for convenience.
@@ -18,13 +16,6 @@ raw_shoppers_data <- read_csv(csv_path)
 
 raw_shoppers_features <- raw_shoppers_data %>% select(-Revenue)
 raw_shoppers_targets <- raw_shoppers_data %>% select(Revenue)
-```
-
-Let us quickly get a brief overview of the data to make sure it was loaded properly.
-
-```{r}
-dim(raw_shoppers_features)
-dim(raw_shoppers_targets)
 ```
 
 ### Dataset Description

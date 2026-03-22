@@ -79,7 +79,8 @@ main <- function(train_path, test_path, output_dir) {
   # ── 5. Save CV lambda plot ────────────────────────────────────────────────
   cv_plot_path <- file.path(output_dir, "lasso_cv_plot.png")
   png(cv_plot_path, width = 800, height = 500)
-  plot(cv_lasso, main = "Cross-Validated AUC vs. log(lambda)")
+  plot(cv_lasso)
+  title(main = "Cross-Validated AUC vs. log(lambda)", line =2.5)
   dev.off()
   message(paste("Saved:", cv_plot_path))
 
