@@ -152,7 +152,6 @@ make clean-all
 ├── CODEOWNERS
 ├── .gitignore
 ├── LICENSE.md
-├── .Rhistory
 ├── docker-compose.yml
 ├── _quarto.yml
 ├── renv.lock
