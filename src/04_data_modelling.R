@@ -1,5 +1,5 @@
-# author: Athena Wong
-# date: 2026-03-18
+# authors: Athena Wong, Oscar Yik
+# date: 2026-03-25
 
 "This script fits a LASSO logistic regression model on the cleaned training data,
 evaluates it on the test set, and saves output figures and tables to results/.
@@ -17,6 +17,8 @@ library(glmnet)
 library(pROC)
 library(caret)
 library(docopt)
+
+source("src/05_create_confusion_matrix.R")
 
 opt <- docopt(doc)
 
@@ -126,24 +128,16 @@ main <- function(train_path, test_path, output_dir) {
   message(paste("Saved:", roc_plot_path))
 
   # ── 9. Confusion matrix ───────────────────────────────────────────────────
-  cm <- confusionMatrix(
-    lasso_test_pred_class,
-    factor(test$Revenue, levels = c("No", "Yes")),
-    positive = "Yes"
-  )
-
-  # Save confusion matrix as a tidy CSV table
-  cm_table <- as.data.frame(cm$table)
-  colnames(cm_table) <- c("Predicted", "Actual", "Count")
+  cm_results <- create_confusion_matrix(lasso_test_pred_class, test$Revenue, c("No", "Yes"), "Yes")
   cm_table_path <- file.path(output_dir, "confusion_matrix.csv")
-  write_csv(cm_table, cm_table_path)
+  write_csv(cm_results$table, cm_table_path)
   message(paste("Saved:", cm_table_path))
 
   # ── 10. Summary metrics table ─────────────────────────────────────────────
-  accuracy     <- cm$overall["Accuracy"]
-  precision    <- cm$byClass["Precision"]
-  recall       <- cm$byClass["Recall"]
-  f1           <- cm$byClass["F1"]
+  accuracy     <- cm_results$metrics["Accuracy"]
+  precision    <- cm_results$by_class["Precision"]
+  recall       <- cm_results$by_class["Recall"]
+  f1           <- cm_results$by_class["F1"]
 
   metrics <- tibble(
     Metric    = c("CV AUC (lambda.min)", "Test AUC", "Test Accuracy",
