@@ -1,6 +1,6 @@
 library(testthat)
 
-source("../../R/split_data.R")
+source("../../src/R/split_data.R")
 
 test_that("returns a list with train and test", {
   result <- split_data(simple_df, 0.8, seed = 123)
@@ -61,6 +61,28 @@ test_that("different seeds give different splits", {
   expect_false(identical(result1, result2))
 })
 
+#edge case: very small dataset
+test_that("handles dataset with one row", {
+  df <- data.frame(x = 1)
+
+  result <- split_data(df, 0.8, seed = 123)
+
+  expect_equal(nrow(result$train) + nrow(result$test), 1)
+  expect_s3_class(result$train, "data.frame")
+  expect_s3_class(result$test, "data.frame")
+})
+
+#edge case: empty dataset
+test_that("handles empty dataset", {
+  df <- data.frame(x = numeric(0))
+
+  result <- split_data(df, 0.8, seed = 123)
+
+  expect_equal(nrow(result$train), 0)
+  expect_equal(nrow(result$test), 0)
+})
+
+#wrong input
 test_that("errors when input is not a data frame", {
   expect_error(
     split_data(non_df_input, 0.8),
@@ -68,6 +90,7 @@ test_that("errors when input is not a data frame", {
   )
 })
 
+#split <= 0 or >= 1
 test_that("errors when split is invalid", {
   expect_error(split_data(simple_df, -0.1))
   expect_error(split_data(simple_df, 1.5))
