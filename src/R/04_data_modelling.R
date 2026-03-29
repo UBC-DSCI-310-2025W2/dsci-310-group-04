@@ -18,7 +18,8 @@ library(pROC)
 library(caret)
 library(docopt)
 
-source("src/05_create_confusion_matrix.R")
+source("src/R/05_create_confusion_matrix.R")
+source("src/R/06_scale_with_train_params.R")
 
 opt <- docopt(doc)
 
@@ -36,22 +37,16 @@ main <- function(train_path, test_path, output_dir) {
     mutate(across(where(is.character), as.factor))
 
   # ── 2. Scale numeric features ─────────────────────────────────────────────
-  # Scaling is fit ONLY on training data to prevent data leakage.
-  # The same mean/sd is applied to the test set.
-  numeric_cols <- train %>% select(where(is.numeric)) %>% colnames()
+  numeric_train <- train %>% select(where(is.numeric))
+  numeric_test <- test %>% select(where(is.numeric))
 
-  train_means <- train %>% select(all_of(numeric_cols)) %>% summarise(across(everything(), mean))
-  train_sds   <- train %>% select(all_of(numeric_cols)) %>% summarise(across(everything(), sd))
+  cat_train <- train %>% select(!where(is.numeric))
+  cat_test <- test %>% select(!where(is.numeric))
 
-  scale_with_train_params <- function(df) {
-    df %>% mutate(across(
-      all_of(numeric_cols),
-      ~ (. - train_means[[cur_column()]]) / train_sds[[cur_column()]]
-    ))
-  }
+  scaled_data <- scale_with_train_params(numeric_train, numeric_test)
 
-  train_scaled <- scale_with_train_params(train)
-  test_scaled  <- scale_with_train_params(test)
+  train_scaled <- cbind(scaled_data$X_train_scaled, cat_train)
+  test_scaled <- cbind(scaled_data$X_test_scaled, cat_test)
 
   # ── 3. Build model matrices ───────────────────────────────────────────────
   x_train <- train_scaled %>%

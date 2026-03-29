@@ -1,6 +1,6 @@
 library(caret)
 
-source("../../src/05_create_confusion_matrix.R")
+source("../../src/R/05_create_confusion_matrix.R")
 
 # class levels
 class_levels <- c("No", "Yes")

@@ -14,7 +14,7 @@
 # example usage:
 # make all
 
-.PHONY: all data process eda model report clean-data clean-results clean-report clean-all
+.PHONY: all data process eda model report clean-data clean-results clean-report clean-all test-all
 
 # run entire analysis
 all: reports/predicting_online_purchasing_behavior.html
@@ -24,8 +24,8 @@ all: reports/predicting_online_purchasing_behavior.html
 # -------------------------
 data: data/raw/online_shoppers_purchasing_intention_dataset.csv
 
-data/raw/online_shoppers_purchasing_intention_dataset.csv: src/01_data_loading.R
-	Rscript src/01_data_loading.R \
+data/raw/online_shoppers_purchasing_intention_dataset.csv: src/R/01_data_loading.R
+	Rscript src/R/01_data_loading.R \
 		--input_url="https://archive.ics.uci.edu/static/public/468/online+shoppers+purchasing+intention+dataset.zip" \
 		--output_file_path="data/raw/online_shoppers_purchasing_intention_dataset.csv"
 
@@ -35,8 +35,8 @@ data/raw/online_shoppers_purchasing_intention_dataset.csv: src/01_data_loading.R
 process: data/processed/shoppers_train.csv \
 	data/processed/shoppers_test.csv
 
-data/processed/shoppers_train.csv data/processed/shoppers_test.csv: src/02_data_cleaning.R data/raw/online_shoppers_purchasing_intention_dataset.csv
-	Rscript src/02_data_cleaning.R \
+data/processed/shoppers_train.csv data/processed/shoppers_test.csv: src/R/02_data_cleaning.R data/raw/online_shoppers_purchasing_intention_dataset.csv
+	Rscript src/R/02_data_cleaning.R \
 		--input_file_path="data/raw/online_shoppers_purchasing_intention_dataset.csv" \
 		--output_dir="data/processed" \
 		--seed=310 \
@@ -51,8 +51,8 @@ eda: results/eda_figure1.png \
 	results/eda_figure4.png \
 	results/eda_figure5.png
 
-results/eda_figure1.png results/eda_figure2.png results/eda_figure3.png results/eda_figure4.png results/eda_figure5.png: src/03_eda.R data/processed/shoppers_train.csv
-	Rscript src/03_eda.R \
+results/eda_figure1.png results/eda_figure2.png results/eda_figure3.png results/eda_figure4.png results/eda_figure5.png: src/R/03_eda.R data/processed/shoppers_train.csv
+	Rscript src/R/03_eda.R \
 		--input_file_path="data/processed/shoppers_train.csv" \
 		--output_prefix="results/eda"
 
@@ -65,8 +65,8 @@ model: results/roc_curve.png \
 	results/lasso_cv_plot.png \
 	results/lasso_coefficients.csv
 
-results/roc_curve.png results/model_metrics.csv results/confusion_matrix.csv results/lasso_cv_plot.png results/lasso_coefficients.csv: src/04_data_modelling.R data/processed/shoppers_train.csv data/processed/shoppers_test.csv
-	Rscript src/04_data_modelling.R \
+results/roc_curve.png results/model_metrics.csv results/confusion_matrix.csv results/lasso_cv_plot.png results/lasso_coefficients.csv: src/R/04_data_modelling.R data/processed/shoppers_train.csv data/processed/shoppers_test.csv
+	Rscript src/R/04_data_modelling.R \
 		--train="data/processed/shoppers_train.csv" \
 		--test="data/processed/shoppers_test.csv" \
 		--output_dir="results"
@@ -76,6 +76,12 @@ results/roc_curve.png results/model_metrics.csv results/confusion_matrix.csv res
 # -------------------------
 reports/predicting_online_purchasing_behavior.html: reports/predicting_online_purchasing_behavior.qmd eda model
 	quarto render reports/predicting_online_purchasing_behavior.qmd
+
+# -------------------------
+# test scripts
+# -------------------------
+test-all:
+	Rscript -e 'testthat::test_dir("tests/testthat")'
 
 # -------------------------
 # clean targets

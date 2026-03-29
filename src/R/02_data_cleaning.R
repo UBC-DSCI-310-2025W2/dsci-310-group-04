@@ -23,10 +23,12 @@ Output:
 library(docopt)
 library(tidyverse)
 
+source("src/R/08_split_data.R")
+
 opt <- docopt(doc)
 
 main <- function(input_file_path, output_dir, seed, split) {
-  set.seed(as.integer(seed))
+
   split <- as.numeric(split)
 
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
@@ -48,17 +50,13 @@ main <- function(input_file_path, output_dir, seed, split) {
     drop_na() %>%
     droplevels()
 
-  n <- nrow(cleaned)
-  train_idx <- sample.int(n, size = floor(split * n))
-
-  train <- cleaned[train_idx, , drop = FALSE]
-  test <- cleaned[-train_idx, , drop = FALSE]
+  cleaned_split <- split_data(cleaned, split, seed)
 
   train_path <- file.path(output_dir, "shoppers_train.csv")
   test_path <- file.path(output_dir, "shoppers_test.csv")
 
-  readr::write_csv(train, train_path)
-  readr::write_csv(test, test_path)
+  readr::write_csv(cleaned_split$train, train_path)
+  readr::write_csv(cleaned_split$test, test_path)
 
   message("Wrote: ", train_path)
   message("Wrote: ", test_path)

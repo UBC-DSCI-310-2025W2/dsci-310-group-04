@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(dsci-310-group-04)
+library("dsci-310-group-04")
 
 test_check("dsci-310-group-04")

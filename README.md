@@ -73,7 +73,11 @@ The analysis will follow the typical stages of a data science workflow:
 
 # How to Run the Analysis
 
-To reproduce this analysis, follow the steps below.
+To reproduce this analysis in Docker, follow the steps below.
+> [!NOTE]
+> This will recreate the entire RStudio development enviroment and reproduce the analysis, figures, and report.
+> This reduces fragility of the analysis and eliminates the "it works on my machine" problem for contributers
+> It is also helpful to have a clean environment to install packages without meddling with the existing system.
 
 ### 1. Clone the repository
 
@@ -92,10 +96,12 @@ cd dsci-310-group-04
 ```bash
 docker compose up -d
 ```
+> [!NOTE]
+> The entrypoint to the pulled Docker container will run `make all` as the entrypoint to run all scripts and generate the report.
 
 ### 4. Wait for the analysis to complete
 The analysis pipeline will run automatically inside the container.
-Please allow approximately 1–2 minutes for all scripts to finish executing.
+Please allow approximately 1–2 minutes for all scripts to finish executing and the Quarto report to be compiled in `/docs/reports`.
 
 ### 5. View the output
 Once the analysis is complete, the rendered reports will be available in:
@@ -121,6 +127,17 @@ Log in using:
 docker compose down
 ```
 
+# Commands (Makefile)
+Commands are provided in the Makefile to run parts of the analysis. 
+When the Docker container is spun up through `docker compose up -d`, it automatically runs `make all` as the entrypoint script. 
+This runs all the scripts, all tests, and compiles the Quarto report in project's `docs/reports/` folder in `.html` and `.pdf` format.
+
+Any of the commands can be run in the container's project root `work/`. 
+Here are some useful commands to run: 
+- `make all`       -> runs all scripts, tests, and builds report
+- `make test-all`  -> runs all tests 
+- `make clean-all` -> deletes all compiled/generated files 
+- and many more in the `Makefile`!
 
 # Running the Analysis with the Makefile (Optional)
 
@@ -166,8 +183,13 @@ make clean-all
 │   └── references/references.bib
 │   └── predicting_online_purchasing_behavior.ipynb
 │   └── predicting_online_purchasing_behavior.qmd
-├── src/
+├── src/R
 │   └──0*_*.R
+├── tests/
+│   └── testthat/
+│      └──helper-*.R
+│      └──test-*.R
+│   └──testthat.R
 ├── results/
 ├── renv/
 ├── docs/
