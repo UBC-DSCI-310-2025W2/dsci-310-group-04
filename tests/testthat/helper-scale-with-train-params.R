@@ -1,4 +1,4 @@
-source("../../src/06_scale_with_train_params.R")
+source("../../src/R/06_scale_with_train_params.R")
 
 # Normal case
 train_normal <- data.frame(a = c(1, 2, 3, 4, 5), b = c(10, 20, 30, 40, 50))

@@ -26,7 +26,7 @@ library(tidyverse)
 library(scales)
 library(docopt)
 
-source(file.path("R", "make_boxplot.R"))
+source("src/R/07_make_boxplot.R")
 
 opt <- docopt(doc)
 
@@ -62,10 +62,10 @@ main <- function(input_file_path, output_prefix) {
             values_to = "Value"
         )
     
-    p1 <- make_boxplot(
-  numeric_long,
-  title = "Figure 1: Boxplots of Numeric Features"
-)
+    p1 <- make_numeric_boxplot(
+        numeric_long,
+        title = "Figure 1: Boxplots of Numeric Features"
+    )
     
     ggsave(
         filename = paste0(output_prefix, "_figure1.png"),
@@ -80,12 +80,12 @@ main <- function(input_file_path, output_prefix) {
     numeric_small <- numeric_long %>%
         filter(Variable %in% c("BounceRates", "ExitRates"))
     
-    p2 <- make_boxplot(
-  numeric_small,
-  title = "Figure 2: Boxplots of BounceRates and ExitRates",
-  x_label_angle_degrees = 30,
-  x_label_size = 11
-)
+    p2 <- make_numeric_boxplot(
+        numeric_small,
+        title = "Figure 2: Boxplots of BounceRates and ExitRates",
+        x_label_angle_degrees = 30,
+        x_label_size = 11
+    )
     
     ggsave(
         filename = paste0(output_prefix, "_figure2.png"),
@@ -123,10 +123,10 @@ main <- function(input_file_path, output_prefix) {
             values_to = "Value"
         )
     
-   p3 <- make_boxplot(
-  numeric_clean_long,
-  title = "Figure 3: Boxplots of Numeric Features"
-)
+    p3 <- make_numeric_boxplot(
+        numeric_clean_long,
+        title = "Figure 3: Boxplots of Numeric Features"
+    )
     
     ggsave(
         filename = paste0(output_prefix, "_figure3.png"),

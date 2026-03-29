@@ -1,7 +1,5 @@
 library(testthat)
 
-source("../../src/R/split_data.R")
-
 test_that("returns a list with train and test", {
   result <- split_data(simple_df, 0.8, seed = 123)
 

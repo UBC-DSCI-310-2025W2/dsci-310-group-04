@@ -1,5 +1,7 @@
 library(tibble)
 
+source("../../src/R/08_split_data.R")
+
 set.seed(123)
 
 # simple dataset

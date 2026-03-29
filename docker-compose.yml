@@ -22,10 +22,10 @@
 
 services:
   analysis-env:
-    image: awong62/dsci-310-group-04:latest
+    # image: awong62/dsci-310-group-04:latest
 
     # do this for local development
-    # image: dsci-310-project:quarto-0.0.1
+    image: dsci-310-project:quarto-0.0.1
 
     environment:
     - PASSWORD=password
@@ -38,3 +38,4 @@ services:
       - ./results:/home/rstudio/work/results
       - ./src:/home/rstudio/work/src
       - ./docs:/home/rstudio/work/docs
+      - ./tests:/home/rstudio/work/tests
