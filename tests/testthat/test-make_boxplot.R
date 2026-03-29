@@ -1,0 +1,70 @@
+library(testthat)
+library(ggplot2)
+
+
+source(here::here("R", "make_boxplot.R"))
+
+
+# --- Synthetic long-format inputs (not the real dataset) ---
+
+# Use case 1: typical multi-variable long data
+df_two_vars <- data.frame(
+  Variable = rep(c("A", "B"), each = 5),
+  Value = c(1:5, 6:10)
+)
+
+# Use case 2: same shape, different title and axis styling 
+df_bounce_style <- data.frame(
+  Variable = rep(c("BounceRates", "ExitRates"), each = 4),
+  Value = c(0.1, 0.2, 0.15, 0.3, 0.05, 0.12, 0.08, 0.2)
+)
+
+# Edge case: minimal data 
+df_minimal <- data.frame(
+  Variable = c("X", "Y"),
+  Value = c(1, 2)
+)
+
+test_that("make_numeric_boxplot returns a ggplot with boxplot geom (typical data)", {
+  p <- make_boxplot(
+    df_two_vars,
+    title = "Figure 1: Boxplots of Numeric Features"
+  )
+  expect_s3_class(p, "ggplot")
+  geoms <- vapply(p$layers, function(x) class(x$geom)[1], character(1))
+  expect_true("GeomBoxplot" %in% geoms)
+  expect_equal(p$labels$title, "Figure 1: Boxplots of Numeric Features")
+})
+
+test_that("make_numeric_boxplot respects custom x label angle and size (second use case)", {
+  p <- make_boxplot(
+    df_bounce_style,
+    title = "Figure 2: Boxplots of BounceRates and ExitRates",
+    x_label_angle_degrees = 30,
+    x_label_size = 11
+  )
+  expect_s3_class(p, "ggplot")
+  expect_equal(p$labels$title, "Figure 2: Boxplots of BounceRates and ExitRates")
+})
+
+test_that("make_numeric_boxplot works with minimal rows per variable (edge case)", {
+  p <- make_boxplot(df_minimal, title = "Minimal")
+  expect_s3_class(p, "ggplot")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("make_numeric_boxplot errors when Variable column is missing", {
+  bad <- data.frame(Value = 1:3)
+  expect_error(
+    make_boxplot(bad, title = "Bad"),
+    "Variable"
+  )
+})
+
+test_that("make_numeric_boxplot errors when Value column is missing", {
+  bad <- data.frame(Variable = c("a", "b"))
+  expect_error(
+    make_boxplot(bad, title = "Bad"),
+    "Value"
+  )
+})
