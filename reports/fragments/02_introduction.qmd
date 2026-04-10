@@ -10,6 +10,4 @@ The dataset exhibits a notable class imbalance: approximately 84.5% of sessions 
 
 We frame this as a binary classification problem and train a LASSO logistic regression model using the glmnet package in R. LASSO (Least Absolute Shrinkage and Selection Operator) is chosen for its ability to perform automatic feature selection by shrinking less informative coefficients to zero (@Li2022). This capability is particularly valuable given the mix of numeric, ordinal, and high-cardinality categorical features present in the dataset. 
 
-Before modeling, we conduct exploratory data analysis to assess feature distributions, class balance, and the relationships between key predictors and purchase outcomes. Categorical features with sparse levels are consolidated into an "Other" category, and right-skewed numeric features are log-transformed to reduce the impact of extreme outliers. The optimal regularization parameter, λ, is selected through cross-validated AUC.
-
-We evaluate model performance using the AUC-ROC on a held-out test set (20% of the data), along with a confusion matrix to examine precision and recall for the minority (purchase) class.
+Before modeling, we conduct exploratory data analysis to assess feature distributions, class balance, and the relationships between key predictors and purchase outcomes. Right-skewed numeric features are log-transformed (log1p) for visualisation purposes in the exploratory data analysis; the modeling pipeline trains on raw standardised features without any log transformation applied.

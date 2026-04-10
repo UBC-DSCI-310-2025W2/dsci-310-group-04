@@ -67,7 +67,10 @@ The analysis will follow the typical stages of a data science workflow:
    Build a LASSO logistic regression model to predict ending with a transaction based on behavioral and demographic features.
 
 5. **Model Evaluation**  
-   Evaluate the model's performance using appropriate metrics such as accuracy and confusion matrices.
+   Evaluate the model's performance using accuracy, AUC-ROC, and per-class
+   metrics including precision, recall, and F1 score. Given the class
+   imbalance (~15% purchase rate), precision, recall, and F1 are
+   particularly informative for assessing performance on the minority class.
 
 ---
 
@@ -220,4 +223,10 @@ More information about renv.lock used in our project can be found [here](https:/
 
 # License
 
-The source code for this project is licensed under the **MIT License**. Please refer to the `LICENSE.md` file for full license details.
+The source code for this project is licensed under the **MIT License**.
+Please refer to the `LICENSE.md` file for full license details.
+
+The written report and non-code materials are licensed under
+[CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/),
+meaning they may be shared with attribution but may not be modified or
+used for commercial purposes.
