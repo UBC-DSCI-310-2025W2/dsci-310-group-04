@@ -24,6 +24,7 @@ library(docopt)
 library(tidyverse)
 
 source("src/R/08_split_data.R")
+source("src/R/data_validation.R")
 
 opt <- docopt(doc)
 
@@ -34,6 +35,8 @@ main <- function(input_file_path, output_dir, seed, split) {
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
   raw <- readr::read_csv(input_file_path, show_col_types = FALSE)
+
+  validate_raw_shoppers(raw)
 
   cleaned <- raw %>%
     mutate(
@@ -48,9 +51,17 @@ main <- function(input_file_path, output_dir, seed, split) {
       Weekend = factor(Weekend)
     ) %>%
     drop_na() %>%
+    distinct() %>%
     droplevels()
 
+  validate_cleaned_shoppers(cleaned)
+
   cleaned_split <- split_data(cleaned, split, seed)
+
+  validate_split_partition(cleaned_split$train)
+  validate_split_partition(cleaned_split$test)
+
+  validate_train_target_distribution(cleaned_split$train)
 
   train_path <- file.path(output_dir, "shoppers_train.csv")
   test_path <- file.path(output_dir, "shoppers_test.csv")
