@@ -25,6 +25,7 @@ library(tidyverse)
 
 source("src/R/08_split_data.R")
 source("src/R/data_validation.R")
+library(evaltools)
 
 opt <- docopt(doc)
 

@@ -17,9 +17,7 @@ library(glmnet)
 library(pROC)
 library(caret)
 library(docopt)
-
-source("src/R/05_create_confusion_matrix.R")
-source("src/R/06_scale_with_train_params.R")
+library(evaltools)
 
 opt <- docopt(doc)
 
