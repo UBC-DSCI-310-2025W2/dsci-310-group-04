@@ -25,8 +25,7 @@ Output figures:
 library(tidyverse)
 library(scales)
 library(docopt)
-
-source("src/R/07_make_boxplot.R")
+library(evaltools)
 
 opt <- docopt(doc)
 
