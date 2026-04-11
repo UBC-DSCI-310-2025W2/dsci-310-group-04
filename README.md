@@ -147,8 +147,13 @@ Please allow approximately 1–2 minutes for all scripts to finish executing and
 Once the analysis is complete, the rendered reports will be available in:
 
 ```bash
-docs/reports
+docs/reports/predicting_online_purchasing_behavior.html
+docs/reports/predicting_online_purchasing_behavior.pdf
 ```
+Open the `.html` file in your browser to read the full report.
+
+Alternatively, the latest rendered report is available online at:
+[https://ubc-dsci-310-2025w2.github.io/dsci-310-group-04/](https://ubc-dsci-310-2025w2.github.io/dsci-310-group-04/)
 
 ### 6. (Optional) Access the RStudio environment
 
