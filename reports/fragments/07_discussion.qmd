@@ -16,7 +16,24 @@ The LASSO penalty successfully reduced the feature space, retaining only the mos
 
 ### Expected vs. Actual Results
 
-These results are broadly consistent with what we anticipated based on the existing literature. @Sakar2019 identified similar behavioral signals — particularly page value and exit rate — as key drivers of purchase intent. The strong performance of LASSO in this setting is also consistent with @Li2022, who demonstrated the effectiveness of L1-penalized models for imbalanced classification tasks. The one area of potential surprise is that the model performs well despite class imbalance (~84.5% negative class) without any resampling or class-weighting adjustments. This suggests that the predictive signal from the positive class is strong enough for LASSO to learn without additional balancing techniques.
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(scales)
+shoppers_targets_train <- read_csv("data/processed/shoppers_train.csv", show_col_types = FALSE)
+
+shoppers_target_imbalance_train <- shoppers_targets_train %>% 
+    count(Revenue, name = "n") %>% 
+    mutate(prop = percent(n / sum(n), accuracy = 0.1))
+
+imbalance_prop <- shoppers_target_imbalance_train %>%
+  filter(Revenue == "No") %>%
+  pull(prop)
+```
+
+These results are broadly consistent with what we anticipated based on the existing literature. @Sakar2019 identified similar behavioral signals — particularly page value and exit rate — as key drivers of purchase intent. The strong performance of LASSO in this setting is also consistent with @Li2022, who demonstrated the effectiveness of L1-penalized models for imbalanced classification tasks. The one area of potential surprise is that the model performs well despite class imbalance (`r imbalance_prop` negative class) without any resampling or class-weighting adjustments. This suggests that the predictive signal from the positive class is strong enough for LASSO to learn without additional balancing techniques.
 
 ### Limitations and Impact
 

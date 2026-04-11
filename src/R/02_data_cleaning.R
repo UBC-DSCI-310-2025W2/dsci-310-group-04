@@ -22,8 +22,7 @@ Output:
 
 library(docopt)
 library(tidyverse)
-
-source("src/R/08_split_data.R")
+library(evaltools)
 
 opt <- docopt(doc)
 
