@@ -18,7 +18,24 @@ We select the optimal regularization parameter, λ, through 10-fold cross-valida
 
 ### Model Evaluation
 
-The final model is evaluated on the held-out 20% test set. We report four complementary metrics in @tbl-metrics: test AUC, accuracy, precision, and recall. Because the dataset is class-imbalanced (~84.5% non-purchase sessions), accuracy alone would be misleading; AUC and recall for the minority (purchase) class are the more informative indicators of real-world performance.
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(scales)
+shoppers_targets_train <- read_csv("data/processed/shoppers_train.csv", show_col_types = FALSE)
+
+shoppers_target_imbalance_train <- shoppers_targets_train %>% 
+    count(Revenue, name = "n") %>% 
+    mutate(prop = percent(n / sum(n), accuracy = 0.1))
+
+imbalance_prop <- shoppers_target_imbalance_train %>%
+  filter(Revenue == "No") %>%
+  pull(prop)
+```
+
+The final model is evaluated on the held-out 20% test set. We report four complementary metrics in @tbl-metrics: test AUC, accuracy, precision, and recall. Because the dataset is class-imbalanced (`r imbalance_prop` non-purchase sessions), accuracy alone would be misleading; AUC and recall for the minority (purchase) class are the more informative indicators of real-world performance.
 
 ```{r}
 #| label: tbl-metrics
