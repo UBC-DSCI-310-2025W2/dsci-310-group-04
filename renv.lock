@@ -9,6 +9,18 @@
     ]
   },
   "Packages": {
+    "evaltools": {
+      "Package": "evaltools",
+      "Version": "0.0.0.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "evaltools",
+      "RemoteUsername": "UBC-DSCI-310-2025W2",
+      "RemoteRef": "main",
+      "RemoteSha": "0e73e37dbff91645e980bcaf619d87c056a156d0",
+      "Requirements": ["R", "caret", "ggplot2", "rlang", "stats", "tibble"]
+    },
     "caret": {
       "Package": "caret",
       "Version": "7.0-1",
