@@ -63,7 +63,7 @@ main <- function(input_file_path, output_prefix) {
     
     p1 <- make_numeric_boxplot(
         numeric_long,
-        title = "Figure 1: Boxplots of Numeric Features"
+        title = ""
     )
     
     ggsave(
@@ -81,7 +81,7 @@ main <- function(input_file_path, output_prefix) {
     
     p2 <- make_numeric_boxplot(
         numeric_small,
-        title = "Figure 2: Boxplots of BounceRates and ExitRates",
+        title = "",
         x_label_angle_degrees = 30,
         x_label_size = 11
     )
@@ -124,7 +124,7 @@ main <- function(input_file_path, output_prefix) {
     
     p3 <- make_numeric_boxplot(
         numeric_clean_long,
-        title = "Figure 3: Boxplots of Numeric Features"
+        title = ""
     )
     
     ggsave(
@@ -156,7 +156,6 @@ main <- function(input_file_path, output_prefix) {
         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1)) +
         theme_minimal(base_size = 14) +
         labs(
-            title = "Figure 4: Purchase Rate by Product Pages Visited",
             x = "Count of Product Pages Visited per User Session",
             y = "Purchase Rate"
         )
@@ -175,7 +174,6 @@ main <- function(input_file_path, output_prefix) {
         geom_boxplot(fill = "orange") +
         facet_wrap(~ SpecialDay) +
         labs(
-            title = "Figure 5: Exit Rates vs Purchase Outcome",
             subtitle = "Faceted by SpecialDay (0 = furthest from holiday, 1 = closest to holiday)",
             x = "Purchase Outcome",
             y = "Exit Rates (%)"
