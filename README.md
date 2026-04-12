@@ -52,22 +52,62 @@ The target variable used in this project is **Revenue**, which is a **binary** v
 
 # Methods Overview
 
-The analysis will follow the typical stages of a data science workflow:
+The analysis follows the typical stages of a data science workflow:
 
-1. **Data Loading**  
-   Import the dataset from the original source.
+1. **Data Loading**
+   Download the raw dataset from the UCI Machine Learning Repository using
+   `src/R/01_data_loading.R`.
 
 2. **Data Cleaning**
-   Data cleaning was performed to ensure data quality, consistency, and suitability for modeling.
+   Clean and split the data into training (80%) and test (20%) sets using
+   `src/R/02_data_cleaning.R`. Splitting is performed here to prevent data
+   leakage in downstream steps.
 
-3. **Exploratory Data Analysis (EDA)**  
-   Summarize the dataset and create visualizations to understand relationships between shopper's behavior and intention to purchase.
+3. **Exploratory Data Analysis (EDA)**
+   Generate visualisations and summary tables from the training set using
+   `src/R/03_eda.R`. Outputs are saved to `results/`.
 
-4. **Modeling**  
-   Build a LASSO logistic regression model to predict ending with a transaction based on behavioral and demographic features.
+4. **Modeling**
+   Fit a LASSO logistic regression model using `src/R/04_data_modelling.R`.
+   The regularization parameter λ is selected via cross-validated AUC.
+   Model artifacts are saved to `results/`.
 
-5. **Model Evaluation**  
-   Evaluate the model's performance using appropriate metrics such as accuracy and confusion matrices.
+5. **Model Evaluation**
+   Evaluate model performance using accuracy, AUC-ROC, and per-class
+   metrics including precision, recall, and F1 score. Given the class
+   imbalance (~15% purchase rate), precision, recall, and F1 are
+   particularly informative for assessing performance on the minority class.
+
+6. **Report**
+   The Quarto report (`reports/predicting_online_purchasing_behavior.qmd`)
+   narrates the full analysis and embeds all figures and tables from
+   `results/`. The rendered report is compiled to `docs/reports/` in both
+   `.html` and `.pdf` formats.
+
+---
+
+# Analysis Pipeline
+
+The full pipeline is automated using the `Makefile`. The stages connect as follows:
+
+01_data_loading.R
+↓
+02_data_cleaning.R  →  data/processed/shoppers_train.csv
+→  data/processed/shoppers_test.csv
+↓
+03_eda.R            →  results/eda_figure1.png ... eda_figure5.png
+↓
+04_data_modelling.R →  results/roc_curve.png
+→  results/confusion_matrix.csv
+→  results/model_metrics.csv
+→  results/lasso_coefficients.csv
+→  results/lasso_cv_plot.png
+↓
+quarto render       →  docs/reports/predicting_online_purchasing_behavior.html
+→  docs/reports/predicting_online_purchasing_behavior.pdf
+
+Each script takes the outputs of the previous step as inputs, so the
+pipeline must be run in order. `make all` handles this automatically.
 
 ---
 
@@ -107,8 +147,13 @@ Please allow approximately 1–2 minutes for all scripts to finish executing and
 Once the analysis is complete, the rendered reports will be available in:
 
 ```bash
-docs/reports
+docs/reports/predicting_online_purchasing_behavior.html
+docs/reports/predicting_online_purchasing_behavior.pdf
 ```
+Open the `.html` file in your browser to read the full report.
+
+Alternatively, the latest rendered report is available online at:
+[https://ubc-dsci-310-2025w2.github.io/dsci-310-group-04/](https://ubc-dsci-310-2025w2.github.io/dsci-310-group-04/)
 
 ### 6. (Optional) Access the RStudio environment
 
@@ -128,34 +173,40 @@ docker compose down
 ```
 
 # Commands (Makefile)
-Commands are provided in the Makefile to run parts of the analysis. 
-When the Docker container is spun up through `docker compose up -d`, it automatically runs `make all` as the entrypoint script. 
-This runs all the scripts, all tests, and compiles the Quarto report in project's `docs/reports/` folder in `.html` and `.pdf` format.
 
-Any of the commands can be run in the container's project root `work/`. 
-Here are some useful commands to run: 
-- `make all`       -> runs all scripts, tests, and builds report
-- `make test-all`  -> runs all tests 
-- `make clean-all` -> deletes all compiled/generated files 
-- and many more in the `Makefile`!
+Commands are provided in the `Makefile` to run parts of the analysis.
+When the Docker container is spun up through `docker compose up -d`, it
+automatically runs `make all` via the `entrypoint.sh` script. This runs
+all scripts, all tests, and compiles the Quarto report into
+`docs/reports/` in both `.html` and `.pdf` format.
 
-# Running the Analysis with the Makefile (Optional)
+Any of the following commands can be run manually inside the container
+at the project root `work/`:
 
-The analysis pipeline is automatically executed when running the project using Docker or Docker Compose via the `entrypoint.sh` script.
+| Command | Description |
+|---|---|
+| `make all` | Runs the full pipeline: download, clean, EDA, model, and report |
+| `make data` | Downloads the raw dataset only |
+| `make process` | Cleans and splits the data |
+| `make eda` | Generates EDA figures and tables |
+| `make model` | Fits the model and generates evaluation artifacts |
+| `make report` | Renders the Quarto report |
+| `make test-all` | Runs all unit tests in `tests/testthat/` |
+| `make clean-data` | Deletes downloaded and processed data files |
+| `make clean-results` | Deletes generated figures and tables in `results/` |
+| `make clean-report` | Deletes the rendered report |
+| `make clean-all` | Deletes all generated files |
 
-However, if you are working inside the RStudio environment or running the project locally, you can manually execute the pipeline using the Makefile.
+# Running the Tests
 
-### Run the full analysis pipeline
+To run the full unit test suite manually, start the Docker container and run:
 
 ```bash
-make all
+make test-all
 ```
-This will generate the final report at reports/predicting_online_purchasing_behavior.html
 
-### To remove all generated files:
-```bash
-make clean-all
-```
+This runs all tests in `tests/testthat/` using the `testthat` framework
+and reports which tests pass or fail.
 
 ---
 
@@ -220,4 +271,10 @@ More information about renv.lock used in our project can be found [here](https:/
 
 # License
 
-The source code for this project is licensed under the **MIT License**. Please refer to the `LICENSE.md` file for full license details.
+The source code for this project is licensed under the **MIT License**.
+Please refer to the `LICENSE.md` file for full license details.
+
+The written report and non-code materials are licensed under
+[CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/),
+meaning they may be shared with attribution but may not be modified or
+used for commercial purposes.

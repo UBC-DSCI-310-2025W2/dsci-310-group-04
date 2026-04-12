@@ -1,6 +1,14 @@
 ---
 title: "DSCI 310 Group 4 Data Analysis Project - Predicting Consumer Online Purchasing Behavior"
-author: "Athena Wong, Gracie Shao, Oscar Yik, and Raghav Vashisht"
+author:
+  - name: Athena Wong
+    affiliation: University of British Columbia
+  - name: Gracie Shao
+    affiliation: University of British Columbia
+  - name: Oscar Yik
+    affiliation: University of British Columbia
+  - name: Raghav Vashisht
+    affiliation: University of British Columbia
 editor: source
 markdown:
   wrap: 72
