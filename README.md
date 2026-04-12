@@ -90,6 +90,7 @@ The analysis follows the typical stages of a data science workflow:
 
 The full pipeline is automated using the `Makefile`. The stages connect as follows:
 
+```text
 01_data_loading.R
 ↓
 02_data_cleaning.R  →  data/processed/shoppers_train.csv
@@ -105,6 +106,7 @@ The full pipeline is automated using the `Makefile`. The stages connect as follo
 ↓
 quarto render       →  docs/reports/predicting_online_purchasing_behavior.html
 →  docs/reports/predicting_online_purchasing_behavior.pdf
+```
 
 Each script takes the outputs of the previous step as inputs, so the
 pipeline must be run in order. `make all` handles this automatically.
@@ -191,22 +193,10 @@ at the project root `work/`:
 | `make eda` | Generates EDA figures and tables |
 | `make model` | Fits the model and generates evaluation artifacts |
 | `make report` | Renders the Quarto report |
-| `make test-all` | Runs all unit tests in `tests/testthat/` |
 | `make clean-data` | Deletes downloaded and processed data files |
 | `make clean-results` | Deletes generated figures and tables in `results/` |
 | `make clean-report` | Deletes the rendered report |
 | `make clean-all` | Deletes all generated files |
-
-# Running the Tests
-
-To run the full unit test suite manually, start the Docker container and run:
-
-```bash
-make test-all
-```
-
-This runs all tests in `tests/testthat/` using the `testthat` framework
-and reports which tests pass or fail.
 
 ---
 
@@ -236,11 +226,6 @@ and reports which tests pass or fail.
 │   └── predicting_online_purchasing_behavior.qmd
 ├── src/R
 │   └──0*_*.R
-├── tests/
-│   └── testthat/
-│      └──helper-*.R
-│      └──test-*.R
-│   └──testthat.R
 ├── results/
 ├── renv/
 ├── docs/
@@ -254,6 +239,7 @@ and reports which tests pass or fail.
 This project uses R (version 4.5.3) and manages package dependencies using renv to ensure reproducibility.
 
 Key packages include:
+- evaltools (0.0.0.9000)
 - caret (7.0-1)
 - docopt (0.7.2)
 - glmnet (4.1-10)
@@ -262,6 +248,8 @@ Key packages include:
 - rmarkdown (2.30)
 - scales (1.4.0)
 - tidyverse (2.0.0)
+- pointblank (0.12.3)
+
 
 All package versions are recorded in the renv.lock file.
 

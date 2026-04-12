@@ -63,15 +63,15 @@
       "Source": "Repository",
       "Repository": "CRAN"
     },
-    "testthat": {
-      "Package": "testthat",
-      "Version": "3.3.2",
-      "Source": "Repository",
-      "Repository": "CRAN"
-    },
     "tidyverse": {
       "Package": "tidyverse",
       "Version": "2.0.0",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+     "pointblank": {
+      "Package": "pointblank",
+      "Version": "0.12.3",
       "Source": "Repository",
       "Repository": "CRAN"
     }

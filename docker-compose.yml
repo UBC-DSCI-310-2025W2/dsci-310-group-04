@@ -7,25 +7,25 @@
 #
 # HOW TO USE:
 #   docker compose up -d
-# 
+#
 # HOW TO TURN OFF:
 #   docker compose down
 #
 # Then open the URL printed in the terminal (starts with
 # http://127.0.0.1:8787)
-# 
-# Credentials for login: 
+#
+# Credentials for login:
 # - username = rstudio
-# - password = password 
+# - password = password
 #
 # ============================================================
 
 services:
   analysis-env:
-    image: awong62/dsci-310-group-04:latest
+    # image: awong62/dsci-310-group-04:latest
 
     # do this for local development
-    # image: dsci-310-project:quarto-0.0.1
+    image: dsci-310-project:quarto-0.0.1
 
     environment:
     - PASSWORD=password

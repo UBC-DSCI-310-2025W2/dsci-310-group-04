@@ -6,7 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Athena Wong, Gracie Shao, Oscar Yik, and Raghav Vashisht">
+<meta name="author" content="Athena Wong">
+<meta name="author" content="Gracie Shao">
+<meta name="author" content="Oscar Yik">
+<meta name="author" content="Raghav Vashisht">
 
 <title>DSCI 310 Group 4 Data Analysis Project - Predicting Consumer Online Purchasing Behavior</title>
 <style>
@@ -148,16 +151,47 @@ div.csl-indent {
 </div>
 
 
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Athena Wong </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            University of British Columbia
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Gracie Shao </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            University of British Columbia
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Oscar Yik </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            University of British Columbia
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Raghav Vashisht </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            University of British Columbia
+          </p>
+      </div>
+  </div>
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Athena Wong, Gracie Shao, Oscar Yik, and Raghav Vashisht </p>
-          </div>
-  </div>
-    
+      
   
     
   </div>
@@ -174,16 +208,16 @@ div.csl-indent {
 <p>In this project we try to predict whether an online shopping session will end in a purchase. That’s useful for understanding which users are likely to buy and for supporting efforts on how to improve conversion rates and user experience.</p>
 <p>We use the UCI Online Shoppers Purchasing Intention dataset. It’s public and has about 12,330 sessions. Each row is one session, and we have information on how many admin vs product pages they saw, time on site, bounce and exit rates, and session data like month and whether it was a weekend. The target variable is Revenue which is a binary variable, indicating whether the session ended in a purchase. We downloaded the data from the web, cleaned it up (factors, missing values, etc.), and did an 80/20 train–test split.</p>
 <p>We did some EDA with summary tables and visualizations, then fit a Lasso logistic regression and looked at the confusion matrix and ROC curve.</p>
-<p>The model gets 0.916 AUC and 0.806 precision on the test set. It is very reliable when predicting a purchase but struggles to find them all (0.267 recall). This corresponds to a very precise but low sensitivity model.</p>
+<p>The model gets 0.909 AUC and 0.838 precision on the test set. It is very reliable when predicting a purchase but struggles to find them all (0.245 recall). This corresponds to a very precise but low sensitivity model.</p>
 </section>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Understanding what drives a visitor to complete a purchase is a central challenge in e-commerce. While generating web traffic is relatively easy, converting visits into sales relies on a complex combination of browsing behavior, timing, and user intent. Being able to predict whether a given session (before it ends) will result in revenue would enable online retailers to intervene in real time, personalize experiences, and allocate marketing resources more effectively (<span class="citation" data-cites="Sakar2019">C. O. Sakar et al. (<a href="#ref-Sakar2019" role="doc-biblioref">2019</a>)</span> and <span class="citation" data-cites="Esmeli2021">Esmeli, Bader-El-Den, and Abdullahi (<a href="#ref-Esmeli2021" role="doc-biblioref">2021</a>)</span>).</p>
 <p>In this project, we aim to answer the question: Can we predict whether an online shopping session will result in a purchase based on the behavioral and contextual features recorded during that session?</p>
 <p>To address this, we utilize the Online Shoppers Purchasing Intention Dataset, sourced from the UCI Machine Learning Repository (<span class="citation" data-cites="online_shoppers_purchasing_intention_dataset_468">C. Sakar and Kastro (<a href="#ref-online_shoppers_purchasing_intention_dataset_468" role="doc-biblioref">2018</a>)</span>). This dataset contains 12,330 sessions collected from an e-commerce website over the course of one year. Each session is characterized by 17 features, which fall into three categories: page interaction metrics (e.g., the number of product-related pages visited and the time spent on each page type), web analytics signals (e.g., bounce rate, exit rate, and page value), and session context (e.g., month, whether the visit occurred on a weekend, visitor type, operating system, browser, region, and traffic source). The binary target variable, “Revenue,” indicates whether the session ended in a transaction.</p>
-<p>The dataset exhibits a notable class imbalance: approximately 84.5% of sessions did not result in a purchase, with only 15.5% ending in revenue. This imbalance is common in real-world e-commerce data and must be considered when evaluating model performance.</p>
+<p>The dataset exhibits a notable class imbalance: approximately 84.3% of sessions did not result in a purchase, with only 15.7% ending in revenue. This imbalance is common in real-world e-commerce data and must be considered when evaluating model performance.</p>
 <p>We frame this as a binary classification problem and train a LASSO logistic regression model using the glmnet package in R. LASSO (Least Absolute Shrinkage and Selection Operator) is chosen for its ability to perform automatic feature selection by shrinking less informative coefficients to zero (<span class="citation" data-cites="Li2022">Li, Hsu, and Alzheimer’s Disease Neuroimaging Initiative (<a href="#ref-Li2022" role="doc-biblioref">2022</a>)</span>). This capability is particularly valuable given the mix of numeric, ordinal, and high-cardinality categorical features present in the dataset.</p>
-<p>Before modeling, we conduct exploratory data analysis to assess feature distributions, class balance, and the relationships between key predictors and purchase outcomes. Categorical features with sparse levels are consolidated into an “Other” category, and right-skewed numeric features are log-transformed to reduce the impact of extreme outliers. The optimal regularization parameter, λ, is selected through cross-validated AUC.</p>
+<p>Before modeling, we conduct exploratory data analysis to assess feature distributions, class balance, and the relationships between key predictors and purchase outcomes. Right-skewed numeric features are log-transformed (log1p) for visualisation purposes in the exploratory data analysis; the modeling pipeline trains on raw standardised features without any log transformation applied. The optimal regularization parameter, λ, is selected through cross-validated AUC.</p>
 <p>We evaluate model performance using the AUC-ROC on a held-out test set (20% of the data), along with a confusion matrix to examine precision and recall for the minority (purchase) class.</p>
 </section>
 <section id="methods-and-results" class="level2">
@@ -600,7 +634,7 @@ Figure&nbsp;6: Cross-validated AUC across the LASSO regularization path. The lef
 </section>
 <section id="model-evaluation" class="level3">
 <h3 class="anchored" data-anchor-id="model-evaluation">Model Evaluation</h3>
-<p>The final model is evaluated on the held-out 20% test set. We report four complementary metrics in <a href="#tbl-metrics" class="quarto-xref">Table&nbsp;8</a>: test AUC, accuracy, precision, and recall. Because the dataset is class-imbalanced (~84.5% non-purchase sessions), accuracy alone would be misleading; AUC and recall for the minority (purchase) class are the more informative indicators of real-world performance.</p>
+<p>The final model is evaluated on the held-out 20% test set. We report four complementary metrics in <a href="#tbl-metrics" class="quarto-xref">Table&nbsp;8</a>: test AUC, accuracy, precision, and recall. Because the dataset is class-imbalanced (84.3% non-purchase sessions), accuracy alone would be misleading; AUC and recall for the minority (purchase) class are the more informative indicators of real-world performance.</p>
 <div class="cell">
 <div id="tbl-metrics" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -619,27 +653,27 @@ Table&nbsp;8: Summary of LASSO logistic regression performance on the held-out t
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">CV AUC (lambda.min)</td>
-<td style="text-align: right;">0.9036</td>
+<td style="text-align: right;">0.9058</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Test AUC</td>
-<td style="text-align: right;">0.9161</td>
+<td style="text-align: right;">0.9089</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Test Accuracy</td>
-<td style="text-align: right;">0.8788</td>
+<td style="text-align: right;">0.8755</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Test Precision</td>
-<td style="text-align: right;">0.8065</td>
+<td style="text-align: right;">0.8378</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Test Recall</td>
-<td style="text-align: right;">0.2667</td>
+<td style="text-align: right;">0.2454</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Test F1</td>
-<td style="text-align: right;">0.4008</td>
+<td style="text-align: right;">0.3796</td>
 </tr>
 </tbody>
 </table>
@@ -679,13 +713,13 @@ Table&nbsp;9: Confusion matrix for the final LASSO model on the held-out test se
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No</td>
-<td style="text-align: right;">2067</td>
-<td style="text-align: right;">275</td>
+<td style="text-align: right;">2044</td>
+<td style="text-align: right;">286</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Yes</td>
-<td style="text-align: right;">24</td>
-<td style="text-align: right;">100</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">93</td>
 </tr>
 </tbody>
 </table>
@@ -716,19 +750,19 @@ Table&nbsp;10: Non-zero LASSO coefficients for the final model, ranked by absolu
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">PageValues</td>
-<td style="text-align: right;">0.9504</td>
+<td style="text-align: right;">0.8642</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">MonthNov</td>
-<td style="text-align: right;">0.1520</td>
+<td style="text-align: right;">0.1063</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">ProductRelated</td>
-<td style="text-align: right;">0.0707</td>
+<td style="text-align: left;">ExitRates</td>
+<td style="text-align: right;">-0.0281</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">ExitRates</td>
-<td style="text-align: right;">-0.0540</td>
+<td style="text-align: left;">ProductRelated_Duration</td>
+<td style="text-align: right;">0.0181</td>
 </tr>
 </tbody>
 </table>
@@ -752,7 +786,7 @@ Table&nbsp;10: Non-zero LASSO coefficients for the final model, ranked by absolu
 </section>
 <section id="expected-vs.-actual-results" class="level3">
 <h3 class="anchored" data-anchor-id="expected-vs.-actual-results">Expected vs.&nbsp;Actual Results</h3>
-<p>These results are broadly consistent with what we anticipated based on the existing literature. <span class="citation" data-cites="Sakar2019">C. O. Sakar et al. (<a href="#ref-Sakar2019" role="doc-biblioref">2019</a>)</span> identified similar behavioral signals — particularly page value and exit rate — as key drivers of purchase intent. The strong performance of LASSO in this setting is also consistent with <span class="citation" data-cites="Li2022">Li, Hsu, and Alzheimer’s Disease Neuroimaging Initiative (<a href="#ref-Li2022" role="doc-biblioref">2022</a>)</span>, who demonstrated the effectiveness of L1-penalized models for imbalanced classification tasks. The one area of potential surprise is that the model performs well despite class imbalance (~84.5% negative class) without any resampling or class-weighting adjustments. This suggests that the predictive signal from the positive class is strong enough for LASSO to learn without additional balancing techniques.</p>
+<p>These results are broadly consistent with what we anticipated based on the existing literature. <span class="citation" data-cites="Sakar2019">C. O. Sakar et al. (<a href="#ref-Sakar2019" role="doc-biblioref">2019</a>)</span> identified similar behavioral signals — particularly page value and exit rate — as key drivers of purchase intent. The strong performance of LASSO in this setting is also consistent with <span class="citation" data-cites="Li2022">Li, Hsu, and Alzheimer’s Disease Neuroimaging Initiative (<a href="#ref-Li2022" role="doc-biblioref">2022</a>)</span>, who demonstrated the effectiveness of L1-penalized models for imbalanced classification tasks. The one area of potential surprise is that the model performs well despite class imbalance (84.3% negative class) without any resampling or class-weighting adjustments. This suggests that the predictive signal from the positive class is strong enough for LASSO to learn without additional balancing techniques.</p>
 </section>
 <section id="limitations-and-impact" class="level3">
 <h3 class="anchored" data-anchor-id="limitations-and-impact">Limitations and Impact</h3>
