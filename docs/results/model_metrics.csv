@@ -1,7 +1,7 @@
 Metric,Value
-CV AUC (lambda.min),0.9036
-Test AUC,0.9161
-Test Accuracy,0.8788
-Test Precision,0.8065
-Test Recall,0.2667
-Test F1,0.4008
+CV AUC (lambda.min),0.9058
+Test AUC,0.9089
+Test Accuracy,0.8755
+Test Precision,0.8378
+Test Recall,0.2454
+Test F1,0.3796

@@ -78,12 +78,6 @@ reports/predicting_online_purchasing_behavior.html: reports/predicting_online_pu
 	quarto render reports/predicting_online_purchasing_behavior.qmd
 
 # -------------------------
-# test scripts
-# -------------------------
-test-all:
-	Rscript -e 'testthat::test_dir("tests/testthat")'
-
-# -------------------------
 # clean targets
 # -------------------------
 clean-data:
